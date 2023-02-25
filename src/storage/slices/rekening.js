@@ -3,6 +3,8 @@ import DataServices from "../../services/data.service.js";
 import {modalbackto, resetinputmodal} from "./component.js";
 import {setMessage} from "./messages.js";
 import {get_transaksi} from "./transaksi.js";
+import {get_transfer} from "./transfer.js";
+import {get_utangpiutang} from "./utang_piutang.js";
 
 export const add_rekening = createAsyncThunk("rekening/add", async ({name, is_hidden, initial_deposit}, thunkAPI) => {
         try {
@@ -27,6 +29,8 @@ export const edit_rekeneing = createAsyncThunk("rekening/edit", async ({id, name
             const data = await DataServices.Rekening.put(id, name, is_hidden, initial_deposit);
             thunkAPI.dispatch(get_summary_rekening())
             thunkAPI.dispatch(get_rekening())
+            thunkAPI.dispatch(get_transfer())
+            thunkAPI.dispatch(get_utangpiutang())
             thunkAPI.dispatch(get_transaksi())
             thunkAPI.dispatch(modalbackto())
             return data;
@@ -43,6 +47,8 @@ export const delete_rekening = createAsyncThunk("rekening/delete", async ({id}, 
             const data = await DataServices.Rekening.delete(id);
             thunkAPI.dispatch(get_summary_rekening())
             thunkAPI.dispatch(get_rekening())
+            thunkAPI.dispatch(get_transfer())
+            thunkAPI.dispatch(get_utangpiutang())
             thunkAPI.dispatch(get_transaksi())
             thunkAPI.dispatch(modalbackto())
             return data

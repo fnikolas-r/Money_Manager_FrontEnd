@@ -42,7 +42,13 @@ function Home(props) {
                     <FloatButton/>
                     <ModalMaster/>
                 </div>
-        {/*    TODO:Analisis tahap 2*/}
+        {/*    TODO: Last Before add
+            1. Tambahkan simple graphic
+            2. Atur kondisi ketika erorr dan tambahkan modal
+            3. Atur kondisi ketika session habis
+            4. Buat kategori default saat berhasil buat akun
+
+        */}
         </>
     )
 }

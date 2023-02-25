@@ -3,6 +3,8 @@ import DataServices from "../../services/data.service.js";
 import {setMessage} from "./messages.js";
 import {modalbackto} from "./component.js";
 import {get_transaksi} from "./transaksi.js";
+import {get_transfer} from "./transfer.js";
+import {get_utangpiutang} from "./utang_piutang.js";
 
 const call_back = (e,thunkAPI)=>{
     const pesan1 = (e.response.data.name ?? "") + (e.response.data.icon ?? "")
@@ -27,8 +29,10 @@ export const edit_kategori = createAsyncThunk("kategori/edit", async ({id,name,i
 
         try {
             const data = await DataServices.Kategori.put(id,name,icon);
-                        thunkAPI.dispatch(get_transaksi())
-                        thunkAPI.dispatch(get_kategori())
+            thunkAPI.dispatch(get_transaksi())
+            thunkAPI.dispatch(get_kategori())
+            thunkAPI.dispatch(get_transfer())
+            thunkAPI.dispatch(get_utangpiutang())
             thunkAPI.dispatch(modalbackto())
             return data;
 
@@ -40,6 +44,8 @@ export const delete_kategori = createAsyncThunk("kategori/delete", async ({id}, 
         try {
             const data = await DataServices.Kategori.delete(id);
             thunkAPI.dispatch(get_transaksi())
+            thunkAPI.dispatch(get_transfer())
+            thunkAPI.dispatch(get_utangpiutang())
             thunkAPI.dispatch(get_kategori())
             thunkAPI.dispatch(modalbackto())
             return data

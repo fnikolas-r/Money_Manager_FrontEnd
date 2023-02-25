@@ -20,7 +20,13 @@ function TabelTransaksi() {
                 accessorKey: 'trc_type',
                 header: 'Jenis Transaksi',
                 Cell: ({cell}) => {
-                    return cell.getValue() == 1 ? "Pendapatan" : "Pengeluaran"
+                    var text= "Pengeluaran"
+                    var color = "text-red-500"
+                    if(cell.getValue() == 1 ){
+                        text = "Pendapatan"
+                        color = "text-green-500"
+                    }
+                    return <span className={color}>{text}</span>
                 }
             },
             {
@@ -35,7 +41,7 @@ function TabelTransaksi() {
                 header: 'Tanggal Transaksi',
                 Cell: ({cell}) => {
                     return dayjs(cell.getValue()).format('dddd, DD MMM YYYY (hh:mm)')
-                }
+                },
             },
             {
                 accessorKey: 'rekening',
@@ -93,7 +99,7 @@ function TabelTransaksi() {
 
     return <div className="px-4 sm:px-6 lg:px-8">
         <h1 className="text-xl font-semibold text-gray-900 mb-3">Tabel Transaksi</h1>
-        <MaterialReactTable columns={columns} data={data_transaksi}/>
+        <MaterialReactTable columns={columns} data={data_transaksi} initialState={{pagination:{ pageIndex: 0, pageSize: 5 }}} />
     </div>
 
 

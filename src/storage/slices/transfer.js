@@ -21,6 +21,7 @@ export const add_transfer = createAsyncThunk("transfer/add", async ({keterangan,
             thunkAPI.dispatch(get_rekening())
             thunkAPI.dispatch(get_summary_rekening())
             thunkAPI.dispatch(get_transfer())
+            thunkAPI.dispatch(resetinputmodal())
             return data;
 
         } catch (e) {
