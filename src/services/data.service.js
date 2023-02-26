@@ -1,6 +1,6 @@
 import axios from 'axios'
 import AuthService from "../services/auth.service.js";
-// import store from '../storage/store.js';
+
 
 const {refresh_token} = AuthService;
 const API_URL = import.meta.env.VITE_API_URL
@@ -14,7 +14,7 @@ const get_local_key = () => {
 api.interceptors.request.use(config => {
     const token = get_local_key();
     if (token && token.access) {
-        config.headers["Authorization"] = `Bearer ${token ? token.access : ""}`;
+        config.headers["Authorization"] = `Bearer ${token.access }`;
     }
     return config;
 }, (error) => {
@@ -33,14 +33,15 @@ api.interceptors.response.use(res => {
 
             try {
                 const token = await refresh_token();
-                //TODO: Perbaiki ini nanti
-                const rs = token.data ? token.data.access : "KOSONG";
+
+                const rs = token.data.access
 
                 api.defaults.headers.common["Authorization"] = `Bearer ${rs}`;
 
                 return api(originalConfig);
 
             } catch (_error) {
+
                 if (_error.response && _error.response.data) {
                     return Promise.reject(_error.response.data);
                 }

@@ -19,18 +19,19 @@ export const register = createAsyncThunk(
             await thunkAPI.dispatch(login({username,password}))
             return response.data
         }catch (e) {
-            const pesan1 = (e.response.data.username ?? null )+ (e.response.data.email ?? null )
+            console.log(e)
+            const pesan1 = (e.response.data.username ?? "" )+ (e.response.data.email ?? "" )
 
             const message = (e.response && pesan1 ) || e.toString()
 
-            thunkAPI.dispatch(setMessage(message))
+            thunkAPI.dispatch(setMessage({status:400,message:message}))
             return thunkAPI.rejectWithValue()
         }
     })
 
 export const login = createAsyncThunk(
   "auth/login",
-  async ({ username, password }, thunkAPI) => {
+  async ({ username, password ,remember_me}, thunkAPI) => {
     try {
       const user_token = await AuthService.login(username, password);
       const user_data = await AuthService.request_profile();
@@ -40,9 +41,9 @@ export const login = createAsyncThunk(
       await thunkAPI.dispatch(get_utangpiutang())
       await thunkAPI.dispatch(get_summary_rekening())
       await thunkAPI.dispatch(get_transfer())
+        await thunkAPI.dispatch(setMessage({message:"Berhasil Login",status:200}))
       return {user:user_data, token:user_token};
     } catch (e) {
-        console.log(e)
         const pesan1 = (e.response.data.username ?? "")+ (e.response.data.password ?? "" )
       const message = (e.response && (pesan1==""?null:pesan1) ) || e.response.data.detail || e.toString();
       thunkAPI.dispatch(setMessage({status:400,message:message}));

@@ -5,6 +5,8 @@ import {setMessage} from "./messages.js";
 import {get_transaksi} from "./transaksi.js";
 import {get_transfer} from "./transfer.js";
 import {get_utangpiutang} from "./utang_piutang.js";
+import {logout} from "./auth.js";
+import AuthService from "../../services/auth.service.js";
 
 export const add_rekening = createAsyncThunk("rekening/add", async ({name, is_hidden, initial_deposit}, thunkAPI) => {
         try {
@@ -63,8 +65,10 @@ export const get_rekening = createAsyncThunk('rekening/get', async (_, thunkAPI)
         const data = await DataServices.Rekening.get();
         return data;
     } catch (e) {
-        thunkAPI.dispatch(refresh_token())
-        const message = e.response.data.detail || e.toString();
+        AuthService.refresh_token().catch(e=>{
+            thunkAPI.dispatch(logout())
+        })
+        const message = e.detail
         thunkAPI.dispatch(setMessage({status: 400, message: message}));
         return thunkAPI.rejectWithValue("Terjadi Kesalahan");
     }

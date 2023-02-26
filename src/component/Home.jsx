@@ -4,7 +4,6 @@ import PriceTag from "./MicroComponent/PriceTag";
 import FloatButton from "./MicroComponent/FloatButton";
 import Dividers from "./MicroComponent/Divider";
 import {useSelector} from "react-redux";
-import {Navigate} from "react-router-dom";
 import 'dayjs/locale/id';
 import dayjs from "dayjs";
 import ModalMaster from "./MicroComponent/Modals/ModalMaster";
@@ -20,12 +19,10 @@ function Home(props) {
 
     const {isLoggedIn} = useSelector(state=>state.auth)
     const rekening = useSelector(state => state.rekening)
-   if (!isLoggedIn){
-        return <Navigate to="/auth/login"/>
-    }
     const {summary} = rekening
     return (
         <>
+
             <Navbar/>
                 <div className="mx-4 mb-10">
                     <PriceTag stats={summary}/>
@@ -43,11 +40,12 @@ function Home(props) {
                     <ModalMaster/>
                 </div>
         {/*    TODO: Last Before add
-            1. Tambahkan simple graphic
-            2. Atur kondisi ketika erorr dan tambahkan modal
-            3. Atur kondisi ketika session habis
-            4. Buat kategori default saat berhasil buat akun
 
+
+
+            Minor patch
+            1. Tambahkan simple graphic
+            1. Remember me button at login component
         */}
         </>
     )

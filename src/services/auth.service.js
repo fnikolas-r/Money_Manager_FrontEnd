@@ -1,4 +1,6 @@
 import axios from "axios";
+import {setMessage} from "../storage/slices/messages.js";
+import {useDispatch} from "react-redux";
 
 const API_URL= import.meta.env.VITE_API_URL
 
@@ -6,9 +8,9 @@ const API_URL= import.meta.env.VITE_API_URL
     async function login(username,password){
         return axios.post(API_URL +"login/",{username,password}).then(
             response =>{
-                console.log(response)
                 if (response.data.refresh){
-                    localStorage.setItem("user-token",JSON.stringify(response.data))
+                     localStorage.setItem("user-token",JSON.stringify(response.data))
+
                     return response.data
 
                 }
@@ -27,7 +29,6 @@ const API_URL= import.meta.env.VITE_API_URL
     }
 
     function request_profile(){
-    console.log(JSON.parse(localStorage.getItem("user-token")).access)
         return axios.get(API_URL+"login/profile/",{headers:
                 { Authorization : `Bearer ${JSON.parse(localStorage.getItem("user-token")).access}`
             }

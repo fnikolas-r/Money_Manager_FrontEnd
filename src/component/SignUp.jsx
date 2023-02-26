@@ -36,7 +36,7 @@ YupPassword(yup)
             last_name : yup.string().required(),
             email:yup.string().email().required(),
             password:yup.string().password().required(),
-            password2:yup.string().oneOf([yup.ref("password")])
+            password2:yup.string().oneOf([yup.ref("password")],"Password Harus Sama")
         }).required();
 
     const {register, handleSubmit, watch, formState: {errors}} = useForm({
@@ -149,25 +149,6 @@ YupPassword(yup)
                                     </div>
 
 
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex items-center">
-                                            <input autoComplete="nope"
-                                                id="remember-me"
-                                                name="remember-me"
-                                                type="checkbox"
-                                                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                                            />
-                                            <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-                                                Remember me
-                                            </label>
-                                        </div>
-
-                                        <div className="text-sm">
-                                            <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
-                                                Forgot your password?
-                                            </a>
-                                        </div>
-                                    </div>
                                     <div className="text-sm content-center text-center">
                                         <NavLink to={"/auth/login"} className="font-medium text-gray-300 hover:text-gray-400">
                                             Sudah mendaftar ? Ayo Login

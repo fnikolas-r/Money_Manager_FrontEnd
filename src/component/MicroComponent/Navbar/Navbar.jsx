@@ -16,7 +16,10 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-
+const MENUITEM = [
+    {key: 1, link: "/", name: "Home"},
+    {key: 2, link: "/summary/", name: "Statistik"},
+]
 export default function Navbar() {
     var dispatch = useDispatch();
 
@@ -53,13 +56,9 @@ export default function Navbar() {
                                 </div>
                                 <div className="hidden md:ml-6 md:flex md:space-x-8">
                                     {/* Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" */}
-                                    {
-                                        [
-                                            {key: 1, link: "/", name: "Home"},
-                                            {key: 2, link: "/auth/", name: "String"},
-                                        ].map((item) => (
-                                            <NavbarMenu {...item} />
-                                        ))}
+                                    {MENUITEM.map((item) => (
+                                        <NavbarMenu {...item} />
+                                    ))}
                                 </div>
                             </div>
                             <div className="flex items-center">
@@ -71,9 +70,9 @@ export default function Navbar() {
                                         text-white bg-indigo-600 shadow-sm hover:bg-indigo-700
                                         focus:outline-none focus:ring-2 focus:ring-offset-2
                                         focus:ring-indigo-500"
-                                      onClick={()=>{
-                                          dispatch(setinputmodalstatus({status:true,name:"input_transaksi"}))
-                                      }}
+                                        onClick={() => {
+                                            dispatch(setinputmodalstatus({status: true, name: "input_transaksi"}))
+                                        }}
                                     >
                                         <FontAwesomeIcon icon={faPlusSquare}/>
                                         <span className="ml-3">Transaksi Baru</span>
@@ -149,7 +148,9 @@ export default function Navbar() {
                                                                 active ? 'bg-gray-100' : '',
                                                                 'block px-4 py-2 text-sm text-gray-700'
                                                             )}
-                                                            onClick={()=>{dispatch(logout())}}
+                                                            onClick={() => {
+                                                                dispatch(logout())
+                                                            }}
                                                         >
                                                             Sign out
                                                         </a>
@@ -166,34 +167,19 @@ export default function Navbar() {
                     <Disclosure.Panel className="md:hidden">
                         <div className="pt-2 pb-3 space-y-1">
                             {/* Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700" */}
-                            <Disclosure.Button
+                            {
+                                MENUITEM.map(item=>{
+                                    return <Disclosure.Button
                                 as="a"
-                                href="#"
-                                className="bg-indigo-50 border-indigo-500 text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium sm:pl-5 sm:pr-6"
+                                href={item.link}
+                                key={item.key}
+                                className={({ isActive }) => (isActive ? 'border-b-2 ' : ' ')+" text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium sm:pl-5 sm:pr-6"}
                             >
-                                Dashboard
+                                        {item.name}
                             </Disclosure.Button>
-                            <Disclosure.Button
-                                as="a"
-                                href="#"
-                                className="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium sm:pl-5 sm:pr-6"
-                            >
-                                Team
-                            </Disclosure.Button>
-                            <Disclosure.Button
-                                as="a"
-                                href="#"
-                                className="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium sm:pl-5 sm:pr-6"
-                            >
-                                Projects
-                            </Disclosure.Button>
-                            <Disclosure.Button
-                                as="a"
-                                href="#"
-                                className="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium sm:pl-5 sm:pr-6"
-                            >
-                                Calendar
-                            </Disclosure.Button>
+                                })
+                            }
+
                         </div>
                         <div className="pt-4 pb-3 border-t border-gray-200">
                             <div className="flex items-center px-4 sm:px-6">
@@ -235,10 +221,11 @@ export default function Navbar() {
                                     as="a"
                                     href="#"
                                     className="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100 sm:px-6"
-                                >
-                                    <span onClick={()=>{
+                                    onClick={() => {
                                         dispatch(logout())
-                                    }}>Sign out</span>
+                                    }}
+                                >
+                                    <span>Sign out</span>
                                 </Disclosure.Button>
                             </div>
                         </div>

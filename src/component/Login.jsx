@@ -1,17 +1,13 @@
 import React from "react";
 import Logo from '../assets/logo.png';
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faGoogle, faGithub} from '@fortawesome/free-brands-svg-icons';
-import {useSelector, useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {useForm} from "react-hook-form";
-import {login,logout} from '../storage/slices/auth.js';
+import {login, logout} from '../storage/slices/auth.js';
 import {Navigate, NavLink} from "react-router-dom";
 import Bg from '../assets/bg.jpg';
 
 function Login(props) {
-
-
-
+    const dispatch = useDispatch()
     const handleLogin = (formValue) => {
         const {username, password} = formValue;
 
@@ -24,7 +20,6 @@ function Login(props) {
                 console.log("Error")
             });
     };
-    const dispatch = useDispatch();
 
     if(props.logout){
         dispatch(logout())
@@ -37,6 +32,7 @@ function Login(props) {
     }
     return (
         <>
+
             <div className="min-h-full flex">
                 <div className="flex-1 flex flex-col justify-center py-24 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
                     <div className="mx-auto w-full max-w-sm lg:w-96">
