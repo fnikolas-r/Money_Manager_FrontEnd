@@ -29,7 +29,7 @@ export default function ListKategori(props){
         return data.map(item=>{return {
         id:item.id,
         title:item.name,
-        summary:[`Icon Name :${item.icon}`],
+        summary:[`Type :${item.jenis==1? "Income Category" : item.jenis==-1? "Expense Category" : "All"}`],
             icon:item.icon ?? "fa-money-bill"
     }})
     }

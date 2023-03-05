@@ -14,9 +14,9 @@ const call_back = (e,thunkAPI)=>{
     return thunkAPI.rejectWithValue("Terjadi Kesalahan");
 }
 
-export const add_kategori = createAsyncThunk("kategori/add", async ({name,icon}, thunkAPI) => {
+export const add_kategori = createAsyncThunk("kategori/add", async ({name,icon,jenis}, thunkAPI) => {
         try {
-            const data = await DataServices.Kategori.add(name,icon);
+            const data = await DataServices.Kategori.add(name,icon,jenis);
             thunkAPI.dispatch(get_kategori())
             thunkAPI.dispatch(modalbackto())
             return data;
@@ -25,7 +25,7 @@ export const add_kategori = createAsyncThunk("kategori/add", async ({name,icon},
             return call_back(e,thunkAPI)
         }
     })
-export const edit_kategori = createAsyncThunk("kategori/edit", async ({id,name,icon}, thunkAPI) => {
+export const edit_kategori = createAsyncThunk("kategori/edit", async ({id,name,icon,jenis}, thunkAPI) => {
 
         try {
             const data = await DataServices.Kategori.put(id,name,icon);

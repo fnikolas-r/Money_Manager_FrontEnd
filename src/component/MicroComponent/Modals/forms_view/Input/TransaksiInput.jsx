@@ -8,7 +8,7 @@ import {yupResolver} from "@hookform/resolvers/yup";
 import {logout} from "../../../../../storage/slices/auth.js";
 import {add_kategori, edit_kategori, get_detail_kategori} from "../../../../../storage/slices/kategori.js";
 import {add_transaksi, edit_transaksi, get_detail_transaksi} from "../../../../../storage/slices/transaksi.js";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import dayjs from "dayjs";
 
 export default function TransaksiInput(props) {
@@ -32,7 +32,7 @@ export default function TransaksiInput(props) {
     const {detail} = transaksi;
 
 
-    const {register, setValue,handleSubmit, formState: {errors}} = useForm({
+    const {register, getValues,setValue,handleSubmit, formState: {errors}} = useForm({
             resolver:yupResolver(schema),
             })
 
@@ -56,6 +56,9 @@ export default function TransaksiInput(props) {
             dispatch(add_transaksi(data))
         }
     }
+
+    const [kategori_list, setKategori_list] = useState(kategori.data);
+
     return <form onSubmit={handleSubmit(handle_transaksi)}>
         <div className="mt-6 gap-y-6 gap-x-4 sm:grid-cols-6">
         <div className="flex mt-2">
@@ -131,6 +134,9 @@ export default function TransaksiInput(props) {
                 <div className="mt-1">
                     <select
                         {...register("trc_type")}
+                        onChange={(event)=>{
+                            setKategori_list(kategori_data.filter((val)=>(val.jenis==event.target.value || val.jenis==null)))
+                        }}
                         className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                     >
                         <option value={1}>Pendapatan</option>
@@ -147,7 +153,7 @@ export default function TransaksiInput(props) {
                         {...register("kategori")}
                         className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                     >
-                    {kategori_data.map(item=>{
+                    {kategori_list.map(item=>{
                         return <option key={item.id} value={item.id}>{item.name}</option>
                     })}
                     </select>

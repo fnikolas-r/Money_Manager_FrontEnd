@@ -38,12 +38,12 @@ export default function CardItem(props) {
           py-2 border border-transparent shadow-sm text-sm font-medium rounded-md
           text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2
           focus:ring-offset-2 focus:ring-indigo-500"
-          onClick={()=>{dispatch(setinputmodalstatus({name:"delete_"+props.name,id:props.id,before:props.before}))}}
+          onClick={()=>{dispatch(setinputmodalstatus({name:"delete_"+props.name,id:props.id,before:props.before,detail:{name:props.title}}))}}
           >
             <FontAwesomeIcon icon="fa-solid fa-trash"
             />
           </button>
-          <button onClick={()=>{dispatch(setinputmodalstatus({name:"input_"+props.name, id:props.id,before:props.before}))}}
+          <button onClick={()=>{dispatch(setinputmodalstatus({name:"input_"+props.name, id:props.id,before:props.before,detail:{name:props.title}}))}}
               type="button" className="mt-2 relative inline-flex items-center px-2 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
             <FontAwesomeIcon icon="fa-solid fa-edit"/>
           </button>

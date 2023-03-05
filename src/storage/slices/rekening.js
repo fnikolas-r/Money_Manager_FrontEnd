@@ -1,16 +1,19 @@
 import {createSlice, createAsyncThunk} from "@reduxjs/toolkit";
 import DataServices from "../../services/data.service.js";
-import {modalbackto, resetinputmodal} from "./component.js";
+import {modalbackto, resetinputmodal,setinputmodalstatus} from "./component.js";
 import {setMessage} from "./messages.js";
 import {get_transaksi} from "./transaksi.js";
 import {get_transfer} from "./transfer.js";
 import {get_utangpiutang} from "./utang_piutang.js";
 import {logout} from "./auth.js";
 import AuthService from "../../services/auth.service.js";
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
-export const add_rekening = createAsyncThunk("rekening/add", async ({name, is_hidden, initial_deposit}, thunkAPI) => {
+
+export const add_rekening = createAsyncThunk("rekening/add", async ({name, is_hidden, initial_deposit,icon}, thunkAPI) => {
         try {
-            const data = await DataServices.Rekening.add(name, is_hidden, initial_deposit);
+            const data = await DataServices.Rekening.add(name, is_hidden, initial_deposit,icon);
             thunkAPI.dispatch(get_summary_rekening())
             thunkAPI.dispatch(get_transaksi())
             thunkAPI.dispatch(modalbackto())
@@ -25,10 +28,10 @@ export const add_rekening = createAsyncThunk("rekening/add", async ({name, is_hi
         }
     })
 
-export const edit_rekeneing = createAsyncThunk("rekening/edit", async ({id, name, is_hidden, initial_deposit}, thunkAPI) => {
+export const edit_rekeneing = createAsyncThunk("rekening/edit", async ({id,icon, name, is_hidden, initial_deposit}, thunkAPI) => {
 
         try {
-            const data = await DataServices.Rekening.put(id, name, is_hidden, initial_deposit);
+            const data = await DataServices.Rekening.put(id, name, is_hidden, initial_deposit,icon);
             thunkAPI.dispatch(get_summary_rekening())
             thunkAPI.dispatch(get_rekening())
             thunkAPI.dispatch(get_transfer())
@@ -107,7 +110,10 @@ const rekening = createSlice({
     reducers:{
         reset_detail_rekening : (state)=>{
             state.detail = firststate
-        }
+        },
+        change_icon : (state,action)=>{
+          state.detail.icon = action.payload
+      }
     },
     extraReducers:{
         [get_rekening.fulfilled] : (state,actions) =>{
@@ -136,4 +142,5 @@ const rekening = createSlice({
 })
 
 const {reducer,actions} = rekening;
+export const { change_icon } = actions
 export default reducer;

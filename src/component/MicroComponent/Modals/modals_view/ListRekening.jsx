@@ -25,7 +25,8 @@ export default function ListRekening(props){
         return data.map(item=>{return {
         id:item.rekening,
         title:item.name,
-        summary:[`Total : ${item.total}`,`Latest Transaction : ${item.latest_trc}`]
+        summary:[`Total : ${item.total}`,`Latest Transaction : ${item.latest_trc}`],
+            icon:item.icon ?? "fa-money-bill"
     }})
     }
 

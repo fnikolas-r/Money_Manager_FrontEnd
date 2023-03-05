@@ -7,7 +7,7 @@ import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {useDispatch, useSelector} from "react-redux";
 import {edit_kategori, add_kategori, get_detail_kategori, change_icon} from "../../../../../storage/slices/kategori.js";
-import {modalbackto} from "../../../../../storage/slices/component.js";
+import {modalbackto, resetinputmodal} from "../../../../../storage/slices/component.js";
 
 export default function KategoriInput(props) {
     const dispatch = useDispatch();
@@ -39,11 +39,11 @@ export default function KategoriInput(props) {
             })
 
     const handle_kategori = (data)=> {
-        const {name, icon} = data;
+        const {name, icon,jenis} = data;
         if(id){
-            dispatch(edit_kategori({id, name, icon}))
+            dispatch(edit_kategori({id, name, icon,jenis}))
         }else{
-            dispatch(add_kategori({name,icon}))
+            dispatch(add_kategori({name,icon,jenis}))
         }
     }
 
@@ -53,6 +53,7 @@ export default function KategoriInput(props) {
             if( detail.name===""){dispatch(get_detail_kategori({id}))}
             setValue("name",detail.name)
             setValue("icon",detail.icon)
+            setValue("jenis",detail.jenis)
         }
 
     },[id,detail])
@@ -116,6 +117,21 @@ export default function KategoriInput(props) {
 
             </div>
         </div>
+            <div className="sm:col-span-3 mt-3 ">
+                    <label htmlFor="country" className="block text-sm font-medium text-gray-700">
+                        Jenis
+                    </label>
+                    <div className="mt-1">
+                        <select
+                            {...register("jenis")}
+                            className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                        >
+                            <option value={null}>Semua</option>
+                            <option value={-1}>Pengeluaran</option>
+                            <option value={1}>Pendapatan</option>
+                        </select>
+                    </div>
+                </div>
     </div>
         <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
                                     <button

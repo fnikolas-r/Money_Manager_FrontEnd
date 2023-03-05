@@ -34,6 +34,8 @@
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.7.0",
     "react-toastify": "^9.1.1",
+    "sweetalert2": "^11.7.3",
+    "sweetalert2-react-content": "^5.0.7",
     "uuidv4": "^6.2.13",
     "yup": "^1.0.0",
     "yup-password": "^0.2.2"

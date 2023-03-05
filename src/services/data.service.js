@@ -68,12 +68,12 @@ const Rekening = {
         }
         return api.get(URL).then(response => response.data)
     },
-    add(name, is_hidden, initial_deposit) {
-        return api.post(this.URL, {name, is_hidden, initial_deposit}
+    add(name, is_hidden, initial_deposit,icon) {
+        return api.post(this.URL, {name, is_hidden, initial_deposit,icon}
         ).then(response => response.data)
     },
-    put(id, name, is_hidden, initial_deposit) {
-        return api.patch(this.URL + id + "/", {name, is_hidden, initial_deposit}).then(response => response.data)
+    put(id, name, is_hidden, initial_deposit,icon) {
+        return api.patch(this.URL + id + "/", {name, is_hidden, initial_deposit,icon}).then(response => response.data)
     },
     delete(id) {
         return api.delete(this.URL + id + "/").then(response => response.data)
@@ -93,12 +93,14 @@ const Kategori = {
         }
         return api.get(URL).then(response => response.data)
     },
-    add(name, icon) {
-        return api.post(this.URL, {name, icon}
+    add(name, icon,jenis) {
+        var jenis2= jenis?? "";
+        return api.post(this.URL, {name, icon,jenis2}
         ).then(response => response.data)
     },
-    put(id, name, icon) {
-        return api.patch(this.URL + id + "/", {name, icon},).then(response => response.data)
+    put(id, name, icon,jenis) {
+        var jenis2= jenis?? "";
+        return api.patch(this.URL + id + "/", {name, icon,jenis2},).then(response => response.data)
     },
     delete(id) {
         return api.delete(this.URL + id + "/").then(response => {

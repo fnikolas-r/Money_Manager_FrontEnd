@@ -12,7 +12,6 @@ export default function FloatButton(props) {
 
     return <>
         <button className="z-[100] fixed bottom-7 p-3 right-7 rounded-full bg-blue-400 w-14 h-14 peer hover:animate-spin "
-                onMouseEnter={() => setIsMenuHover(true)}
                 onClick={() => setIsMenuHover((prevState) => !prevState)}
         >
             <FontAwesomeIcon className="text-white text-lg" icon={faGear}/>
@@ -30,7 +29,10 @@ export default function FloatButton(props) {
             <ul className={"z-[1000] fixed bottom-24 right-7 "}>
                 <li className="mb-3">
                     <button className="z-[1000] rounded-full bg-blue-400 w-14 h-14"
-                        onClick={()=>{dispatch(setinputmodalstatus({status:true,name:"list_rekening"}))}}
+                        onClick={()=>{
+                            setIsMenuHover(false)
+                            dispatch(setinputmodalstatus({status:true,name:"list_rekening"}))
+                        }}
                     >
                         <FontAwesomeIcon className="text-lg text-white" icon={faBank}/>
                     </button>
@@ -38,6 +40,7 @@ export default function FloatButton(props) {
                 <li className="mb-3">
                     <button className="z-[1000] rounded-full bg-blue-400 w-14 h-14"
                         onClick={()=>{
+                            setIsMenuHover(false)
                             dispatch(setinputmodalstatus({status:true,name:"list_kategori"}))
                         }}
                     >
@@ -47,6 +50,7 @@ export default function FloatButton(props) {
                 <li className="mb-3">
                     <button className="z-[1000] rounded-full bg-blue-400 w-14 h-14"
                                             onClick={()=>{
+                                                setIsMenuHover(false)
                             dispatch(setinputmodalstatus({status:true,name:"input_transfer",id:null}))
                         }}
                     >
@@ -56,6 +60,7 @@ export default function FloatButton(props) {
                 <li className="mb-3">
                     <button className="z-[1000] rounded-full bg-blue-400 w-14 h-14"
                     onClick={()=>{
+                        setIsMenuHover(false)
                             dispatch(setinputmodalstatus({status:true,name:"input_utang_piutang",id:null}))
                         }}
                     >
