@@ -31,7 +31,8 @@ export default function KategoriInput(props) {
 
         const schema = yup.object({
           name: yup.string().required().max(50),
-          icon: yup.string()
+          icon: yup.string(),
+            jenis:yup.string(),
         }).required();
 
         const {register, setValue,handleSubmit, formState: {errors}} = useForm({
@@ -126,9 +127,9 @@ export default function KategoriInput(props) {
                             {...register("jenis")}
                             className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                         >
-                            <option value={null}>Semua</option>
-                            <option value={-1}>Pengeluaran</option>
-                            <option value={1}>Pendapatan</option>
+                            <option value="">Semua</option>
+                            <option value="-1">Pengeluaran</option>
+                            <option value="1">Pendapatan</option>
                         </select>
                     </div>
                 </div>

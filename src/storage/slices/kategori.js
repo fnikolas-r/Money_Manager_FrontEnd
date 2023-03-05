@@ -26,9 +26,8 @@ export const add_kategori = createAsyncThunk("kategori/add", async ({name,icon,j
         }
     })
 export const edit_kategori = createAsyncThunk("kategori/edit", async ({id,name,icon,jenis}, thunkAPI) => {
-
         try {
-            const data = await DataServices.Kategori.put(id,name,icon);
+            const data = await DataServices.Kategori.put(id,name,icon,jenis);
             thunkAPI.dispatch(get_transaksi())
             thunkAPI.dispatch(get_kategori())
             thunkAPI.dispatch(get_transfer())

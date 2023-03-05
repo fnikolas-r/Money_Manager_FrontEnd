@@ -29,8 +29,9 @@ function Home(props) {
     const {summary} = rekening
     const {modalInputOpen} = component;
 
-    const MySwal = withReactContent(Swal)
+
     const check_fist = ()=>{
+        const MySwal = withReactContent(Swal)
         if(rekening.data.length<1 && !modalInputOpen.status){
 
             MySwal.fire({
@@ -54,7 +55,7 @@ function Home(props) {
 
     useEffect(() => {
         check_fist()
-    }, [get_rekening,get_kategori,modalInputOpen.status]);
+    }, [get_rekening.fulfilled,get_kategori.fulfilled,modalInputOpen.status]);
 
     //TODO:Perbaiki bug nya rekeningn kosong nanti
     return (
