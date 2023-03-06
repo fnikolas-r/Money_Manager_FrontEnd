@@ -33,7 +33,7 @@ function Login(props) {
     return (
         <>
 
-            <div className="min-h-full flex">
+            <div className="min-h-[100vh] flex">
                 <div className="flex-1 flex flex-col justify-center py-24 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
                     <div className="mx-auto w-full max-w-sm lg:w-96">
                         <div>

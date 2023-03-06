@@ -107,7 +107,7 @@ function TabelUtangPiutang() {
     );
 
     return <div className="px-4 sm:px-6 lg:px-8">
-        <h1 className="text-xl font-semibold text-gray-900 mb-3">Tabel Transfer</h1>
+        <h1 className="text-xl font-semibold text-gray-900 mb-3">Tabel Utang Piutang</h1>
         <MaterialReactTable columns={columns} data={data_table} enableRowActions initialState={{pagination:{ pageIndex: 0, pageSize: 5 }}}
         renderRowActionMenuItems={({ closeMenu,row }) => [
             <MenuItem
