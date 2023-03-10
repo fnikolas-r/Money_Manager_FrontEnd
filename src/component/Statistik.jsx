@@ -32,7 +32,7 @@ function Statistik(props) {
 
     const data_pengeluaran = Data_Services.TRANSAKSI_DATA_FACTORY(data, -1, "Pengeluaran", true, 10)
     const data_pendapatan = Data_Services.TRANSAKSI_DATA_FACTORY(data, 1, "Pendapatan", true, 10)
-    const stats = Data_Services.TRANSAKSI_STATS(data)
+    const stats = Data_Services.TRANSAKSI_STATS(transaksi.data.filter(v=>(v.id_transfer==null)))
     console.log(utang_p)
     const data_harian = Data_Services.TRANSAKSI_DATE_FACTORY(data, jenis_filter)
     const generate_option = (title) => {
