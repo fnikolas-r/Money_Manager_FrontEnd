@@ -25,11 +25,15 @@ ChartJS.register(ArcElement, Tooltip, Legend, Title, CategoryScale,
 function Statistik(props) {
     const [jenis_filter, setJenis_filter] = useState("daily");
     const transaksi = useSelector(state => state.transaksi)
-    const data_pengeluaran = Data_Services.TRANSAKSI_DATA_FACTORY(transaksi.data, -1, "Pengeluaran", true, 10)
-    const data_pendapatan = Data_Services.TRANSAKSI_DATA_FACTORY(transaksi.data, 1, "Pendapatan", true, 10)
-    const stats = Data_Services.TRANSAKSI_STATS(transaksi.data)
+    const {show_hidden_account} = useSelector(state => state.component)
 
-    const data_harian = Data_Services.TRANSAKSI_DATE_FACTORY(transaksi.data, jenis_filter)
+    var data = transaksi.data.filter(v=>show_hidden_account? true:!(v.rekening_hidden))
+
+    const data_pengeluaran = Data_Services.TRANSAKSI_DATA_FACTORY(data, -1, "Pengeluaran", true, 10)
+    const data_pendapatan = Data_Services.TRANSAKSI_DATA_FACTORY(data, 1, "Pendapatan", true, 10)
+    const stats = Data_Services.TRANSAKSI_STATS(data)
+
+    const data_harian = Data_Services.TRANSAKSI_DATE_FACTORY(data, jenis_filter)
     const generate_option = (title) => {
         return {
             plugins: {
@@ -53,7 +57,7 @@ function Statistik(props) {
                 <h3 className="text-lg leading-6 font-medium text-gray-900">Total</h3>
 
                 <dl className="mt-5 flex gap-5 snap-x snap-mandatory ">
-                    {Data_Services.TRANSAKSI_STATS(transaksi.data.filter(item=>item.kategori !=null || item.id_utang_piutang!=null || item.is_protected)).map((item) => {
+                    {Data_Services.TRANSAKSI_STATS(data.filter(item=>item.kategori !=null || item.id_utang_piutang!=null || item.is_protected)).map((item) => {
                         return <div key={item.name} className="snap-center">
                             <Stats key={item.name} {...item}/>
                         </div>
@@ -75,15 +79,17 @@ function Statistik(props) {
                     <h5 className="text-lg leading-6 font-medium text-gray-900">Top 10 Kategori Pengeluaran Transaksi</h5>
                     {
                         Data_Services.TRANSAKSI_SUM(transaksi.data).map(value => {
-                            return <div className="mb-8">
+                            return <div className="mb-8" key={value.rekening}>
                                 {value.rekening}
                                 <div className="bg-gray-200 relative h-4 w-full rounded-2xl">
 
                                     <div
-                                        className={`bg-red-500 absolute top-0 left-0 flex h-full w-[${Math.round(value.sum/stats[2].total)}%] items-center justify-center rounded-2xl text-xs font-semibold text-white`}
+                                        className={`bg-red-500 absolute top-0 left-0 flex h-full items-center justify-center rounded-2xl text-xs font-semibold text-white`}
+                                        style={{width:`${Math.round(value.sum/stats[2].total *100)}%`}}
                                     >
-                                        {(value.sum/stats[2].total).toFixed(2)}%
-                                    </div>
+                                        {(value.sum/stats[2].total).toFixed(2)*100}%
+                                    </div
+>
                                 </div>
                             </div>;
                         })

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import Navbar from "./MicroComponent/Navbar/Navbar.jsx";
 import PriceTag from "./MicroComponent/PriceTag";
 import FloatButton from "./MicroComponent/FloatButton";
@@ -22,10 +22,7 @@ function Home(props) {
     const component = useSelector(state => state.component)
     const kategori = useSelector(state => state.kategori)
     const {summary} = rekening
-    const {modalInputOpen} = component;
-
-
-
+    const {modalInputOpen,show_hidden_account} = component;
 
     //TODO:Perbaiki bug nya rekeningn kosong nanti
     return (
@@ -33,7 +30,7 @@ function Home(props) {
 
             <Navbar/>
                 <div className="mx-4 mb-10">
-                    <PriceTag stats={summary}/>
+                    <PriceTag stats={summary.filter(val=>(show_hidden_account? true:(!val.rekening_hidden)))}/>
                     <Dividers name="Daftar Transaksi"/>
                     <div className="mb-10">
                         <TabelTransasksi/>
@@ -45,7 +42,6 @@ function Home(props) {
                         <TabelUtangPiutang/>
                     </div>
                     <FloatButton/>
-                    <ModalMaster/>
                 </div>
         {/*    TODO: Last Before add
 

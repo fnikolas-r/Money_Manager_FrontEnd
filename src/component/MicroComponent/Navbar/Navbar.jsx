@@ -9,7 +9,7 @@ import NavbarMenu from "./NavbarMenu";
 import FormInput from "../Modals/FormInput.jsx";
 import DefaultModal from "../Modals/DefaultModal.jsx";
 import TransaksiInput from "../Modals/forms_view/Input/TransaksiInput";
-import {setinputmodalstatus} from "../../../storage/slices/component.js";
+import {set_hidden_status, setinputmodalstatus} from "../../../storage/slices/component.js";
 import {logout} from "../../../storage/slices/auth.js";
 
 function classNames(...classes) {
@@ -62,6 +62,18 @@ export default function Navbar() {
                                 </div>
                             </div>
                             <div className="flex items-center">
+                                <div className="flex-shrink-0">
+                                    <div className="border-indigo-500  text-gray-900 inline-flex items-center px-1 pt-1 text-sm font-medium">
+                                        <select className="relative inline-flex items-center border border-transparent
+                                           text-sm rounded-md
+                                        " onChange={val => {
+                                        dispatch(set_hidden_status(val.target.value == 'true'))
+                                    }}>
+                                        <option value={false} defaultValue={true}>Sembunyikan Rekening Hidden</option>
+                                        <option value={true}>Tampilkan Rekening Hidden</option>
+                                    </select>
+                                    </div>
+                                </div>
                                 <div className="flex-shrink-0">
                                     <button
                                         type="button"
@@ -168,15 +180,15 @@ export default function Navbar() {
                         <div className="pt-2 pb-3 space-y-1">
                             {/* Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700" */}
                             {
-                                MENUITEM.map(item=>{
+                                MENUITEM.map(item => {
                                     return <Disclosure.Button
-                                as="a"
-                                href={item.link}
-                                key={item.key}
-                                className={({ isActive }) => (isActive ? 'border-b-2 ' : ' ')+" text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium sm:pl-5 sm:pr-6"}
-                            >
+                                        as="a"
+                                        href={item.link}
+                                        key={item.key}
+                                        className={({isActive}) => (isActive ? 'border-b-2 ' : ' ') + " text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium sm:pl-5 sm:pr-6"}
+                                    >
                                         {item.name}
-                            </Disclosure.Button>
+                                    </Disclosure.Button>
                                 })
                             }
 

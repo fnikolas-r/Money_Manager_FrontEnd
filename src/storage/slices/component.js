@@ -4,8 +4,12 @@ const component = createSlice({
     name:"component",
     initialState:{
         modalInputOpen: {status:false,name:null,before:false,id:null,detail:null},
+        show_hidden_account :false,
     },
     reducers:{
+        set_hidden_status :(state,action)=>{
+            state.show_hidden_account = action.payload
+        },
         setinputmodalstatus: (state,action)=>{
             state.modalInputOpen.status = true;
             state.modalInputOpen.id = action.payload.id ?? state.modalInputOpen.id;
@@ -38,4 +42,4 @@ const component = createSlice({
 
 const {reducer,actions} = component;
 export default reducer;
-export const {setinputmodalstatus,resetinputmodal,modalbackto} = actions;
+export const {setinputmodalstatus,resetinputmodal,modalbackto,set_hidden_status} = actions;

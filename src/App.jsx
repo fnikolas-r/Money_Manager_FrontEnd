@@ -12,9 +12,10 @@ import {get_transfer} from "./storage/slices/transfer.js";
 import {get_utangpiutang} from "./storage/slices/utang_piutang.js";
 import SignUp from "./component/SignUp.jsx";
 import {ToastContainer} from "react-toastify";
-import {useEffect} from "react";
+import React, {useEffect} from "react";
 import ComingSoon from "./component/Soon";
 import Statistik from "./component/Statistik";
+import ModalMaster from "./component/MicroComponent/Modals/ModalMaster.jsx";
 
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
     return (
         <>
             <ToastContainer/>
+            <ModalMaster/>
         <Router>
             <Routes>
                 <Route path="/" element={<LoginRequired><Home/></LoginRequired>}/>

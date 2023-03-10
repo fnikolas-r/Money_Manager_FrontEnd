@@ -9,7 +9,7 @@ dayjs.extend(WeekofYear)
 const TRANSAKSI_SUM = (data,jenis=-1,sorted=false,limit=10)=>{
     var result = [];
 
-    var data_filter = data.filter(v=>v.kategori!==null && v.trc_type==jenis);
+    var data_filter = data.filter(v=>v.kategori!==null && v.trc_type==jenis );
   data_filter.reduce(function(res, value) {
     if (!res[value.kategori] ) {
       res[value.kategori] = { id: value.id, sum: 0, rekening:value.kategori};
@@ -40,7 +40,9 @@ const TRANSAKSI_SUM = (data,jenis=-1,sorted=false,limit=10)=>{
 const TRANSAKSI_DATE = (data_raw,jenis,recap_by)=>{
      var result = [];
      var data_filter = [];
-     var data = data_raw.filter(value=>{return dayjs(data_raw.trc_date).isBefore(dayjs().add(1,'day'))});
+     var data = data_raw.filter(value=>{return (
+         dayjs(data_raw.trc_date).isBefore(dayjs().add(1,'day'))
+     ) });
      var limit = 30;
      switch (recap_by) {
          case 'weekly':
@@ -157,7 +159,6 @@ const TRANSAKSI_DATE_FACTORY = (data,recap_by='daily',limit=30)=>{
 
 const TRANSAKSI_STATS = (data)=>{
     var dataset = []
-
     dataset.push({
         "name":"Total Balance",
         total:data.reduce((accumulator,current_val)=>{
