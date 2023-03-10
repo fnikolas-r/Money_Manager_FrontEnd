@@ -14,6 +14,7 @@ import SignUp from "./component/SignUp.jsx";
 import {ToastContainer} from "react-toastify";
 import {useEffect} from "react";
 import ComingSoon from "./component/Soon";
+import Statistik from "./component/Statistik";
 
 
 function App() {
@@ -37,7 +38,7 @@ function App() {
         <Router>
             <Routes>
                 <Route path="/" element={<LoginRequired><Home/></LoginRequired>}/>
-                <Route path="/summary" element={<LoginRequired><ComingSoon/></LoginRequired>}/>
+                <Route path="/summary" element={<LoginRequired><Statistik/></LoginRequired>}/>
 
                 <Route path="logout" element={<Login logout={true}/>}/>
                 <Route path="auth/login" element={<Login/>}/>

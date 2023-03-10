@@ -118,6 +118,7 @@ const Transaksi = {
         return api.get(URL).then(response => response.data)
     },
     add(pelaku, trc_name, price, trc_type, trc_date, rekening, kategori) {
+        console.log(`trc date ${trc_date}`)
         return api.post(this.URL, {pelaku, trc_name, price, trc_type, trc_date, rekening, kategori}
         ).then(response => response.data)
     },

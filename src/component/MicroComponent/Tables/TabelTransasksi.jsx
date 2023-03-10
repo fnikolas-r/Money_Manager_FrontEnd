@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import {useDispatch, useSelector} from "react-redux";
 import {setinputmodalstatus} from "../../../storage/slices/component.js";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import Data_Services from "../../../services/function.service.js";
 
 function TabelTransaksi() {
     const dispatch = useDispatch()
@@ -27,7 +28,8 @@ function TabelTransaksi() {
                         color = "text-green-500"
                     }
                     return <span className={color}>{text}</span>
-                }
+                },
+
             },
             {
                 accessorKey: 'price', //normal accessorKey
@@ -40,7 +42,7 @@ function TabelTransaksi() {
                 accessorKey: 'trc_date',
                 header: 'Tanggal Transaksi',
                 Cell: ({cell}) => {
-                    return dayjs(cell.getValue()).format('dddd, DD MMM YYYY (hh:mm)')
+                    return dayjs(cell.getValue()).format('YYYY-MM-DD (hh:mm),dddd')
                 },
             },
             {
@@ -99,7 +101,7 @@ function TabelTransaksi() {
 
     return <div className="px-4 sm:px-6 lg:px-8">
         <h1 className="text-xl font-semibold text-gray-900 mb-3">Tabel Transaksi</h1>
-        <MaterialReactTable columns={columns} data={data_transaksi} initialState={{pagination:{ pageIndex: 0, pageSize: 5 }}} />
+        <MaterialReactTable columns={columns} data={data_transaksi} initialState={{pagination:{ pageIndex: 0, pageSize: 5 }, }} />
     </div>
 
 

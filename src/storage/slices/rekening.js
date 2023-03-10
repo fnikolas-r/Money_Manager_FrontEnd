@@ -66,6 +66,16 @@ export const delete_rekening = createAsyncThunk("rekening/delete", async ({id}, 
 export const get_rekening = createAsyncThunk('rekening/get', async (_, thunkAPI) => {
     try {
         const data = await DataServices.Rekening.get();
+        const MySwal = withReactContent(Swal)
+        if(data.length<1){
+
+            MySwal.fire({
+              title: "Rekening anda belum ada, silahkan isi rekening terlebih dahulu",
+              icon: 'error',
+            }).then(()=>{
+                thunkAPI.dispatch(setinputmodalstatus({name:"add_rekening",id:null,before:null}))
+            })
+        }
         return data;
     } catch (e) {
         AuthService.refresh_token().catch(e=>{

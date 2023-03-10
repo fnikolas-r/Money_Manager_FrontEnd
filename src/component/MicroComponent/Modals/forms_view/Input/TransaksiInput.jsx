@@ -35,7 +35,6 @@ export default function TransaksiInput(props) {
     const {register, getValues,setValue,handleSubmit, formState: {errors}} = useForm({
             resolver:yupResolver(schema),
             })
-
     useEffect(()=>{
         if(id){
             if( detail.trc_name===""){dispatch(get_detail_transaksi({id}))}
@@ -50,10 +49,11 @@ export default function TransaksiInput(props) {
 
     },[id,detail])
     const handle_transaksi = (data)=> {
+        console.log(data)
         if(id){
-            dispatch(edit_transaksi({...data,id}))
+            dispatch(edit_transaksi({...data,trc_date:dayjs(data.trc_date).format("YYYY-MM-DDThh:mm").toString(),id}))
         }else{
-            dispatch(add_transaksi(data))
+            dispatch(add_transaksi({...data,trc_date:dayjs(data.trc_date).format("YYYY-MM-DDThh:mm").toString()}))
         }
     }
 

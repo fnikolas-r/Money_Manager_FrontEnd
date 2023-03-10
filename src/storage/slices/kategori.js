@@ -1,10 +1,12 @@
 import {createSlice, createAsyncThunk} from "@reduxjs/toolkit";
 import DataServices from "../../services/data.service.js";
 import {setMessage} from "./messages.js";
-import {modalbackto} from "./component.js";
+import {modalbackto, setinputmodalstatus} from "./component.js";
 import {get_transaksi} from "./transaksi.js";
 import {get_transfer} from "./transfer.js";
 import {get_utangpiutang} from "./utang_piutang.js";
+import withReactContent from "sweetalert2-react-content";
+import Swal from "sweetalert2";
 
 const call_back = (e,thunkAPI)=>{
     const pesan1 = (e.response.data.name ?? "") + (e.response.data.icon ?? "")
@@ -57,6 +59,17 @@ export const delete_kategori = createAsyncThunk("kategori/delete", async ({id}, 
 export const get_kategori = createAsyncThunk('kategori/get', async (_, thunkAPI) => {
     try {
         const data = await DataServices.Kategori.get();
+        const MySwal = withReactContent(Swal)
+
+        if(data.length<1){
+
+            MySwal.fire({
+              title: "Kategori anda belum ada, silahkan isi Kategori terlebih dahulu",
+              icon: 'error',
+            }).then(()=>{
+                thunkAPI.dispatch(setinputmodalstatus({name:"add_kategori",id:null,before:null}))
+            })
+        }
         return data;
     } catch (e) {
         const message = e.response.data.detail || e.toString();

@@ -36,7 +36,7 @@ function TabelUtangPiutang() {
                 accessorKey: 'tgl_transaksi',
                 header: 'Tanggal Transaksi',
                 Cell: ({cell}) => {
-                    return dayjs(cell.getValue()).format('dddd, DD MMM YYYY (hh:mm)')
+                    return dayjs(cell.getValue()).format('YYYY-MM-DD (hh:mm),dddd')
                 }
             },
             {
@@ -55,7 +55,7 @@ function TabelUtangPiutang() {
                     var color = 'text-green-500'
 
                     const tgl = date[0]
-                    const tgl_str = dayjs(tgl).format('dddd, DD MMM YYYY (hh:mm)')
+                    const tgl_str = dayjs(tgl).format('YYYY-MM-DD (hh:mm),dddd')
                     if(tgl && date[1]=='false'){
                         if(dayjs(tgl).isBefore(dayjs(),'day') ){
                             status = "(Terlambat) "+tgl_str

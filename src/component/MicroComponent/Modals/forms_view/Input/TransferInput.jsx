@@ -175,9 +175,9 @@ export default function TransferInput(props) {
 
     const handle_transfer = (data) => {
         if (id) {
-            dispatch(edit_transfer({...data, id}))
+            dispatch(edit_transfer({...data,tgl_transfer:dayjs(data.tgl_transfer).format("YYYY-MM-DDThh:mm").toString(), id}))
         } else {
-            dispatch(add_transfer(data))
+            dispatch(add_transfer({...data,tgl_transfer:dayjs(data.tgl_transfer).format("YYYY-MM-DDThh:mm").toString()}))
         }
     }
 

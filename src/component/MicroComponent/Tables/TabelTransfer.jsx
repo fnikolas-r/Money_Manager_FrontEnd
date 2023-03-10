@@ -31,7 +31,7 @@ function TabelTransfer() {
                 accessorKey: 'tgl_transfer',
                 header: 'Tanggal Transfer',
                 Cell: ({cell}) => {
-                    return dayjs(cell.getValue()).format('dddd, DD MMM YYYY (hh:mm)')
+                    return dayjs(cell.getValue()).format('YYYY-MM-DD (hh:mm),dddd')
                 }
             },
             {

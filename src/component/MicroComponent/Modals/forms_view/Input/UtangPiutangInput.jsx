@@ -63,9 +63,9 @@ export default function UtangPiutangInput(props) {
     const handle_utang_piutang = (data) => {
         console.log(data)
         if (id) {
-            dispatch(edit_utangpiutang({...data, id}))
+            dispatch(edit_utangpiutang({...data, id,tgl_transaksi:dayjs(data.tgl_transaksi).format("YYYY-MM-DDThh:mm").toString()}))
         } else {
-            dispatch(add_utangpiutang(data))
+            dispatch(add_utangpiutang({...data,tgl_transaksi:dayjs(data.tgl_transaksi).format("YYYY-MM-DDThh:mm").toString()}))
         }
     }
     return <form onSubmit={handleSubmit(handle_utang_piutang)}>
