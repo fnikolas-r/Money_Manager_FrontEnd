@@ -53,7 +53,7 @@ function Statistik(props) {
                 <h3 className="text-lg leading-6 font-medium text-gray-900">Total</h3>
 
                 <dl className="mt-5 flex gap-5 snap-x snap-mandatory ">
-                    {Data_Services.TRANSAKSI_STATS(transaksi.data).map((item) => {
+                    {Data_Services.TRANSAKSI_STATS(transaksi.data.filter(item=>item.kategori !=null || item.id_utang_piutang!=null || item.is_protected)).map((item) => {
                         return <div key={item.name} className="snap-center">
                             <Stats key={item.name} {...item}/>
                         </div>
