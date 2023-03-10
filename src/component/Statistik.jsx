@@ -25,14 +25,15 @@ ChartJS.register(ArcElement, Tooltip, Legend, Title, CategoryScale,
 function Statistik(props) {
     const [jenis_filter, setJenis_filter] = useState("daily");
     const transaksi = useSelector(state => state.transaksi)
+    const utang_p = useSelector(state => state.utangpiutang)
     const {show_hidden_account} = useSelector(state => state.component)
 
-    var data = transaksi.data.filter(v=>show_hidden_account? true:!(v.rekening_hidden))
+    var data = transaksi.data.filter(v=>show_hidden_account? true:!(v.rekening_hidden) && (v.id_transfer==null))
 
     const data_pengeluaran = Data_Services.TRANSAKSI_DATA_FACTORY(data, -1, "Pengeluaran", true, 10)
     const data_pendapatan = Data_Services.TRANSAKSI_DATA_FACTORY(data, 1, "Pendapatan", true, 10)
     const stats = Data_Services.TRANSAKSI_STATS(data)
-
+    console.log(utang_p)
     const data_harian = Data_Services.TRANSAKSI_DATE_FACTORY(data, jenis_filter)
     const generate_option = (title) => {
         return {
@@ -57,7 +58,9 @@ function Statistik(props) {
                 <h3 className="text-lg leading-6 font-medium text-gray-900">Total</h3>
 
                 <dl className="mt-5 flex gap-5 snap-x snap-mandatory ">
-                    {Data_Services.TRANSAKSI_STATS(data.filter(item=>item.kategori !=null || item.id_utang_piutang!=null || item.is_protected)).map((item) => {
+                    {Data_Services.TRANSAKSI_STATS(data.filter(item=>item.kategori !=null || item.id_utang_piutang!=null || item.id_transfer==null || item.is_protected),
+                        utang_p.data.filter(v=>!v.is_done)
+                    ).map((item) => {
                         return <div key={item.name} className="snap-center">
                             <Stats key={item.name} {...item}/>
                         </div>

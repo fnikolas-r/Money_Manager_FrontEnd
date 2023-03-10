@@ -157,7 +157,8 @@ const TRANSAKSI_DATE_FACTORY = (data,recap_by='daily',limit=30)=>{
 
 }
 
-const TRANSAKSI_STATS = (data)=>{
+const TRANSAKSI_STATS = (data,utang_piutang=[])=>{
+    console.log(utang_piutang)
     var dataset = []
     dataset.push({
         "name":"Total Balance",
@@ -179,6 +180,20 @@ const TRANSAKSI_STATS = (data)=>{
         return accumulator + (current_val.trc_type ==-1 ?  current_val.price : 0)
     },0),
         color:'bg-rose-600'
+    })
+    dataset.push({
+        "name":"Total Utang",
+        total:utang_piutang.reduce((accumulator,current_val)=>{
+        return accumulator + (current_val.type =="U" ?  current_val.nominal : 0)
+    },0),
+        color:'bg-indigo-600'
+    })
+    dataset.push({
+        "name":"Total Piutang",
+        total:utang_piutang.reduce((accumulator,current_val)=>{
+        return accumulator + (current_val.type =="P" ?  current_val.nominal : 0)
+    },0),
+        color:'bg-gray-600'
     })
 
     return dataset
