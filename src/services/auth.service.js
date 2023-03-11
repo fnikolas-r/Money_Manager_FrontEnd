@@ -2,7 +2,7 @@ import axios from "axios";
 import {setMessage} from "../storage/slices/messages.js";
 import {useDispatch} from "react-redux";
 
-const API_URL= import.meta.env.VITE_API_URL
+const API_URL = import.meta.env.VITE_DEBUG=='0' ?import.meta.env.VITE_API_URL : import.meta.env.VITE_API_DEBUG
 
 
     async function login(username,password){
