@@ -16,6 +16,7 @@ import Navbar from "./MicroComponent/Navbar/Navbar";
 import Data_Services from "../services/function.service.js";
 import {useSelector} from "react-redux";
 import Stats from "./MicroComponent/Stats.jsx";
+import dayjs from "dayjs";
 
 ChartJS.register(ArcElement, Tooltip, Legend, Title, CategoryScale,
     LinearScale,
@@ -34,7 +35,11 @@ function Statistik(props) {
     const data_pendapatan = Data_Services.TRANSAKSI_DATA_FACTORY(data, 1, "Pendapatan", true, 10)
     const stats = Data_Services.TRANSAKSI_STATS(transaksi.data.filter(v=>(v.id_transfer==null)))
     console.log(utang_p)
-    const data_harian = Data_Services.TRANSAKSI_DATE_FACTORY(data, jenis_filter)
+    const data_harian = Data_Services.TRANSAKSI_DATE_FACTORY(data.sort((a,b)=>{
+        if(dayjs(a.trc_date).isBefore(dayjs(b.trc_date))) { return -1 }
+        if(dayjs(b.trc_date).isBefore(dayjs(a.trc_date))) { return 1 }
+        return 0
+    }), jenis_filter)
     const generate_option = (title) => {
         return {
             plugins: {
