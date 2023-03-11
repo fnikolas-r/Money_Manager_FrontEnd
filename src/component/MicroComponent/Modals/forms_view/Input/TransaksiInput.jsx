@@ -51,9 +51,9 @@ export default function TransaksiInput(props) {
     const handle_transaksi = (data)=> {
         console.log(data)
         if(id){
-            dispatch(edit_transaksi({...data,trc_date:dayjs(data.trc_date).format("YYYY-MM-DDThh:mm").toString(),id}))
+            dispatch(edit_transaksi({...data,trc_date:dayjs(data.trc_date).format("YYYY-MM-DDTHH:mm").toString(),id}))
         }else{
-            dispatch(add_transaksi({...data,trc_date:dayjs(data.trc_date).format("YYYY-MM-DDThh:mm").toString()}))
+            dispatch(add_transaksi({...data,trc_date:dayjs(data.trc_date).format("YYYY-MM-DDTHH:mm").toString()}))
         }
     }
 
