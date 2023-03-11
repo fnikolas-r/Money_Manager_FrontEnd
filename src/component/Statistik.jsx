@@ -78,10 +78,14 @@ function Statistik(props) {
                     </div>
 
                 </div>
-                <div className="grid h-[50vh]">
+                <div className="grid h-[50vh] mt-10">
                     <h5 className="text-lg leading-6 font-medium text-gray-900">Top 10 Kategori Pengeluaran Transaksi</h5>
                     {
-                        Data_Services.TRANSAKSI_SUM(transaksi.data).map(value => {
+                        Data_Services.TRANSAKSI_SUM(transaksi.data).sort((a,b)=>{
+                            if(a.sum < b.sum) {return 1}
+                            else if(a.sum > b.sum){return -1}
+                            else{return 0}
+                        }).map(value => {
                             return <div className="mb-8" key={value.rekening}>
                                 {value.rekening}
                                 <div className="bg-gray-200 relative h-4 w-full rounded-2xl">
@@ -90,7 +94,8 @@ function Statistik(props) {
                                         className={`bg-red-500 absolute top-0 left-0 flex h-full items-center justify-center rounded-2xl text-xs font-semibold text-white`}
                                         style={{width:`${Math.round(value.sum/stats[2].total *100)}%`}}
                                     >
-                                        {(value.sum/stats[2].total).toFixed(2)*100}%
+                                        {Math.round(((value.sum/stats[2].total) + Number.EPSILON) * 1000)/10}%
+
                                     </div
 >
                                 </div>
