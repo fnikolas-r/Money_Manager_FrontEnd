@@ -5,11 +5,65 @@ import WeekofYear from 'dayjs/plugin/weekOfYear'
 dayjs.extend(AdvancedFormat)
 dayjs.extend(WeekofYear)
 
+function filter_date(data,recap_by){
+    var data_filter = data.map(value=>{
+                 return {...value, trc_date:dayjs(value.trc_date).format("DD/MM/YYYY").toString()}
+             })
+    var limit;
 
-const TRANSAKSI_SUM = (data,jenis=-1,sorted=false,limit=10)=>{
+    switch (recap_by) {
+         case "all":
+             limit = "all"
+             break;
+
+         case "7days":
+             limit = 7
+             break;
+         case 'weekly':
+             limit = 30
+             data_filter = data.map(value=>{
+                 return {...value, trc_date:`Week-Y:${dayjs(value.trc_date).format("ww-YYYY ").toString()}`}
+             })
+             break
+         case "monthly":
+             limit=12
+             data_filter = data.map(value=>{
+                 return {...value, trc_date:dayjs(value.trc_date).format("MM/YYYY").toString()}
+             })
+             break;
+         case "annual":
+             limit=5
+             data_filter = data.map(value=>{
+                 return {...value, trc_date:dayjs(value.trc_date).format("YYYY").toString()}
+             })
+             break
+         default:
+             limit =30
+     }
+     return {
+        data_filter:data_filter,
+         limit:limit
+     }
+}
+function date_range(data,recap_by){
+    var limit;
+    if(recap_by!='all'){
+        const days = recap_by.split('-')
+        limit = dayjs().subtract(days[0],days[1])
+        var result=  data.filter(value=>{
+          return dayjs(value.trc_date).isBefore(dayjs().add(1,'day')) &&
+             dayjs(value.trc_date).isAfter(limit)
+     })
+        return result;
+    }
+
+    return data;
+}
+
+const TRANSAKSI_SUM = (data,jenis=-1,sorted=false,limit=10,recap_by='all')=>{
     var result = [];
 
-    var data_filter = data.filter(v=>v.kategori!==null && v.trc_type==jenis );
+    var data_filter = date_range(data,recap_by).filter(v=>v.kategori!==null && v.trc_type==jenis );
   data_filter.reduce(function(res, value) {
     if (!res[value.kategori] ) {
       res[value.kategori] = { id: value.id, sum: 0, rekening:value.kategori};
@@ -39,34 +93,12 @@ const TRANSAKSI_SUM = (data,jenis=-1,sorted=false,limit=10)=>{
 
 const TRANSAKSI_DATE = (data_raw,jenis,recap_by)=>{
      var result = [];
-     var data_filter = [];
+
      var data = data_raw.filter(value=>{return (
          dayjs(data_raw.trc_date).isBefore(dayjs().add(1,'day'))
      ) });
-     var limit = 30;
-     switch (recap_by) {
-         case 'weekly':
-             data_filter = data.map(value=>{
-                 return {...value, trc_date:`Week-Y:${dayjs(value.trc_date).format("ww-YYYY ").toString()}`}
-             })
-             break
-         case "monthly":
-             limit=12
-             data_filter = data.map(value=>{
-                 return {...value, trc_date:dayjs(value.trc_date).format("MM/YYYY").toString()}
-             })
-             break;
-         case "annual":
-             limit=5
-             data_filter = data.map(value=>{
-                 return {...value, trc_date:dayjs(value.trc_date).format("YYYY").toString()}
-             })
-             break
-         default:
-             data_filter = data.map(value=>{
-                 return {...value, trc_date:dayjs(value.trc_date).format("DD/MM/YYYY").toString()}
-             })
-     }
+
+    var {limit,data_filter} = filter_date(data,recap_by)
 
      data_filter.reduce(function(res, value) {
     if (!res[value.trc_date] ) {
@@ -78,22 +110,14 @@ const TRANSAKSI_DATE = (data_raw,jenis,recap_by)=>{
   }, {})
 
 
-    // if(sorted){
-    //   result =  result.sort((a,b)=>{
-    //       if(a.sum < b.sum){
-    //           return -1
-    //       }else if(a.sum > b.sum){
-    //           return 1
-    //       }else{
-    //           return 0
-    //       }
-    //   })
-    // }
-    if(limit){
-        result = result.splice(0,limit)
+    if (limit==='all'){
+        return result;
     }
 
-    return result;
+    return result.splice(0,limit)
+
+
+
 }
 
 const DYNAMIC_COLOR = (hex=false)=>{
@@ -106,8 +130,8 @@ const DYNAMIC_COLOR = (hex=false)=>{
             return "rgb(" + r + "," + g + "," + b + ")";
 }
 
-const TRANSAKSI_DATA_FACTORY = (data,jenis,title="",sorted=false,limit=false)=>{
-    const data_trc = TRANSAKSI_SUM(data,jenis,sorted,limit)
+const TRANSAKSI_DATA_FACTORY = (data,jenis,title="",sorted=false,recap_by='all')=>{
+    const data_trc = TRANSAKSI_SUM(date_range(data,recap_by),jenis,sorted)
     return {
         labels:data_trc.map(value => {
             return value.rekening
@@ -157,8 +181,9 @@ const TRANSAKSI_DATE_FACTORY = (data,recap_by='daily',limit=30)=>{
 
 }
 
-const TRANSAKSI_STATS = (data,utang_piutang=[])=>{
-    console.log(utang_piutang)
+const TRANSAKSI_STATS = (data_raw,utang_piutang=[],recap_by='all')=>{
+
+    const data = date_range(data_raw,recap_by)
     var dataset = []
     dataset.push({
         "name":"Total Balance",
