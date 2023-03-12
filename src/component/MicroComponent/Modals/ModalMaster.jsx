@@ -22,6 +22,8 @@ function render_name(name) {
             return <FormInput><TransaksiInput/></FormInput>
             break;
 
+        //TODO:Ganti Rekening pelunasan rekening (Buat modal bagian ini)
+
         case "input_rekening":
             return <FormInput><RekeningInput/></FormInput>
             break;
