@@ -1,14 +1,12 @@
 /* This example requires Tailwind CSS v2.0+ */
 import React, {Fragment} from 'react'
-import {Disclosure, Menu, Transition, Portal} from '@headlessui/react'
-import {useDispatch} from "react-redux";
+import {Disclosure, Menu, Transition} from '@headlessui/react'
+import {useDispatch,useSelector} from "react-redux";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faListAlt, faPlusSquare, faBell, faWindowClose} from '@fortawesome/free-regular-svg-icons'
+import {faBell, faListAlt, faPlusSquare, faWindowClose} from '@fortawesome/free-regular-svg-icons'
 import Logo from '../../../assets/logo.png'
+import logo from '../../../assets/logo.png'
 import NavbarMenu from "./NavbarMenu";
-import FormInput from "../Modals/FormInput.jsx";
-import DefaultModal from "../Modals/DefaultModal.jsx";
-import TransaksiInput from "../Modals/forms_view/Input/TransaksiInput";
 import {set_hidden_status, setinputmodalstatus} from "../../../storage/slices/component.js";
 import {logout} from "../../../storage/slices/auth.js";
 
@@ -16,12 +14,17 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
+
+
 const MENUITEM = [
     {key: 1, link: "/", name: "Home"},
     {key: 2, link: "/summary/", name: "Statistik"},
 ]
 export default function Navbar() {
     var dispatch = useDispatch();
+
+    const {user} = useSelector(state => state.auth);
+    const name =`${user.first_name} ${user.last_name}`
 
     return (
         <Disclosure as="nav" className="bg-white shadow z-100">
@@ -61,7 +64,7 @@ export default function Navbar() {
                                     ))}
                                 </div>
                             </div>
-                            <div className="flex items-center">
+                            <div className="hidden md:flex md:items-center">
                                 <div className="flex-shrink-0">
                                     <div className="border-indigo-500  text-gray-900 inline-flex items-center px-1 pt-1 text-sm font-medium">
                                         <select className="relative inline-flex items-center border border-transparent
@@ -194,18 +197,30 @@ export default function Navbar() {
                             }
 
                         </div>
+                        <div className="md:hidden mb-5">
+                            <div className="border-indigo-500  text-gray-900 inline-flex items-center px-1 pt-1 text-sm font-medium">
+                                        <select className="relative inline-flex items-center border border-transparent
+                                           text-sm rounded-md
+                                        " onChange={val => {
+                                        dispatch(set_hidden_status(val.target.value == 'true'))
+                                    }}>
+                                        <option value={false} defaultValue={true}>Sembunyikan Rekening Hidden</option>
+                                        <option value={true}>Tampilkan Rekening Hidden</option>
+                                    </select>
+                                    </div>
+                        </div>
                         <div className="pt-4 pb-3 border-t border-gray-200">
                             <div className="flex items-center px-4 sm:px-6">
                                 <div className="flex-shrink-0">
                                     <img
                                         className="h-10 w-10 rounded-full"
-                                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                        src={logo}
                                         alt=""
                                     />
                                 </div>
                                 <div className="ml-3">
-                                    <div className="text-base font-medium text-gray-800">Tom Cook</div>
-                                    <div className="text-sm font-medium text-gray-500">tom@example.com</div>
+                                    <div className="text-base font-medium text-gray-800">{name}</div>
+                                    <div className="text-sm font-medium text-gray-500">{user.email}</div>
                                 </div>
                                 <button
                                     type="button"
@@ -217,7 +232,7 @@ export default function Navbar() {
                             </div>
                             <div className="mt-3 space-y-1">
                                 <Disclosure.Button
-                                    as="a"
+                                    as="div"
                                     href="#"
                                     className="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100 sm:px-6"
                                 >

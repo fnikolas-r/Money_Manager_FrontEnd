@@ -17,6 +17,7 @@ import Data_Services from "../services/function.service.js";
 import {useSelector} from "react-redux";
 import Stats from "./MicroComponent/Stats.jsx";
 import dayjs from "dayjs";
+import FloatButton from "./MicroComponent/FloatButton";
 
 ChartJS.register(ArcElement, Tooltip, Legend, Title, CategoryScale,
     LinearScale,
@@ -73,7 +74,7 @@ function Statistik(props) {
                 </dl>
             </div>
             <div className="p-10 overflow-y-auto">
-                <div className="grid grid-cols-2 h-[40vh]">
+                <div className="grid sm:grid-cols-1 md:grid-cols-2 md:h-[40vh]">
                     {/*TODO:Konversi ini ke nivo*/}
                     <div className="">
                         <Pie data={data_pengeluaran} options={generate_option("Transaksi Pengeluaran")}/>
@@ -83,7 +84,7 @@ function Statistik(props) {
                     </div>
 
                 </div>
-                <div className="grid h-[50vh] mt-10">
+                <div className="grid mt-10">
                     <h5 className="text-lg leading-6 font-medium text-gray-900">Top 10 Kategori Pengeluaran Transaksi</h5>
                     {
                         Data_Services.TRANSAKSI_SUM(transaksi.data).sort((a,b)=>{
@@ -125,7 +126,7 @@ function Statistik(props) {
             </div>
 
         </div>
-
+        <FloatButton/>
     </>);
 }
 

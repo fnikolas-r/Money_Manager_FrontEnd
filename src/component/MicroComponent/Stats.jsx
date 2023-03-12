@@ -7,7 +7,7 @@ export default function Stats(props) {
   return (
     <div
       className={
-        `-z-20 relative bg-white pt-5 px-4 pb-12 ${props.color??""} sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden w-[30vw]`
+        `-z-20 relative bg-white pt-5 px-4 pb-12 ${props.color??""} sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden md:w-[30vw] sm:w-[50vw]`
       }
     >
       <dt>

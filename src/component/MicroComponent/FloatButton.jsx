@@ -1,5 +1,5 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faBank, faGear, faTags} from "@fortawesome/free-solid-svg-icons";
+import {faBank, faGear, faTags,faPlus} from "@fortawesome/free-solid-svg-icons";
 import React, {Fragment, useState} from "react";
 import {Transition} from "@headlessui/react";
 import {useDispatch} from "react-redux";
@@ -11,6 +11,14 @@ export default function FloatButton(props) {
     const dispatch = useDispatch();
 
     return <>
+        <button className="md:hidden z-[100] fixed bottom-[100px] p-3 right-7 rounded-full bg-green-400 w-14 h-14"
+                onClick={() => {
+                    dispatch(setinputmodalstatus({status: true, name: "input_transaksi"}))
+                    setIsMenuHover(false)
+                }}
+        >
+            <FontAwesomeIcon className="text-white text-lg" icon={faPlus}/>
+        </button>
         <button className="z-[100] fixed bottom-7 p-3 right-7 rounded-full bg-blue-400 w-14 h-14 peer hover:animate-spin "
                 onClick={() => setIsMenuHover((prevState) => !prevState)}
         >
