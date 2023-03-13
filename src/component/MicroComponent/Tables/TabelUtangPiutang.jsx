@@ -16,6 +16,19 @@ function TabelUtangPiutang() {
     const columns = useMemo(
         () => [
             {
+                accessorKey: 'is_done', //access nested data with dot notation
+                header: 'Status',
+                Cell : ({cell})=>{
+                    var tipe = <span><FontAwesomeIcon icon="fa-solid fa-xmark"/> Belum</span>
+                    var color = "text-red-500"
+                    if(cell.getValue()){
+                        tipe = <span><FontAwesomeIcon icon="fa-solid fa-check"/> Lunas</span>
+                        color = "text-green-500"
+                    }
+                    return <span className={color}><strong>{tipe}</strong></span>
+                }
+            },
+            {
                 accessorKey: 'person_in_charge', //access nested data with dot notation
                 header: 'Orang Terkait',
             },
@@ -23,10 +36,10 @@ function TabelUtangPiutang() {
                 accessorKey: 'type', //access nested data with dot notation
                 header: 'Jenis',
                 Cell : ({cell})=>{
-                    var tipe = "Piutang"
+                    var tipe = "Utang"
                     var color = "text-green-500"
-                    if(cell.getValue()=="U"){
-                        tipe = "Utang"
+                    if(cell.getValue()=="P"){
+                        tipe = "Piutang"
                         color = "text-red-500"
                     }
                     return <span className={color}><strong>{tipe}</strong></span>
@@ -108,7 +121,11 @@ function TabelUtangPiutang() {
 
     return <div className="px-4 sm:px-6 lg:px-8">
         <h1 className="text-xl font-semibold text-gray-900 mb-3">Tabel Utang Piutang</h1>
-        <MaterialReactTable columns={columns} data={data_table} enableRowActions initialState={{pagination:{ pageIndex: 0, pageSize: 5 }}}
+        <MaterialReactTable columns={columns} data={data_table} enableRowActions
+                            initialState={
+            {pagination:{ pageIndex: 0, pageSize: 5 },
+                columnVisibility: { is_done: false }
+            }}
         renderRowActionMenuItems={({ closeMenu,row }) => [
             <MenuItem
           key={0}
