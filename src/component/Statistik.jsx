@@ -71,8 +71,9 @@ function Statistik(props) {
                 <div className="">
                     <select onChange={(e) => {
                         setLimit_date(e.target.value)
-                    }
-                    }>
+                    }}
+                    defaultValue={"all"}
+                    >
                         <option value={"all"}>Tampilkan Semua</option>
                         <option value={"7-days"}>1 Minggu Yang Lalu</option>
                         <option value={"1-month"}>1 Bulan yang Lalu</option>

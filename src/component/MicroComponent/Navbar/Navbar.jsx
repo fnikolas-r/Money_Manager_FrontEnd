@@ -20,12 +20,31 @@ const MENUITEM = [
     {key: 1, link: "/", name: "Home"},
     {key: 2, link: "/summary/", name: "Statistik"},
 ]
+
+
+
+
 export default function Navbar() {
     var dispatch = useDispatch();
 
     const {user} = useSelector(state => state.auth);
+    const {show_hidden_account} = useSelector(state => state.component);
     const name =`${user.first_name} ${user.last_name}`
+    const select_show_hidden = ()=> {
+    return <div className="border-indigo-500  text-gray-900 inline-flex items-center px-1 pt-1 text-sm font-medium">
+                                        <select className="relative inline-flex items-center border border-transparent
+                                           text-sm rounded-md
+                                        " onChange={val => {
+                                        dispatch(set_hidden_status(val.target.value == 'true'))
+                                    }}
+                                                defaultValue={show_hidden_account}
+                                        >
+                                        <option value={false} defaultValue={true}>Sembunyikan Rekening Hidden</option>
+                                        <option value={true}>Tampilkan Rekening Hidden</option>
+                                    </select>
+                                    </div>
 
+}
     return (
         <Disclosure as="nav" className="bg-white shadow z-100">
             {({open}) => (
@@ -66,16 +85,7 @@ export default function Navbar() {
                             </div>
                             <div className="hidden md:flex md:items-center">
                                 <div className="flex-shrink-0">
-                                    <div className="border-indigo-500  text-gray-900 inline-flex items-center px-1 pt-1 text-sm font-medium">
-                                        <select className="relative inline-flex items-center border border-transparent
-                                           text-sm rounded-md
-                                        " onChange={val => {
-                                        dispatch(set_hidden_status(val.target.value == 'true'))
-                                    }}>
-                                        <option value={false} defaultValue={true}>Sembunyikan Rekening Hidden</option>
-                                        <option value={true}>Tampilkan Rekening Hidden</option>
-                                    </select>
-                                    </div>
+                                    {select_show_hidden()}
                                 </div>
                                 <div className="flex-shrink-0">
                                     <button
@@ -198,16 +208,7 @@ export default function Navbar() {
 
                         </div>
                         <div className="md:hidden mb-5">
-                            <div className="border-indigo-500  text-gray-900 inline-flex items-center px-1 pt-1 text-sm font-medium">
-                                        <select className="relative inline-flex items-center border border-transparent
-                                           text-sm rounded-md
-                                        " onChange={val => {
-                                        dispatch(set_hidden_status(val.target.value == 'true'))
-                                    }}>
-                                        <option value={false} defaultValue={true}>Sembunyikan Rekening Hidden</option>
-                                        <option value={true}>Tampilkan Rekening Hidden</option>
-                                    </select>
-                                    </div>
+                            {select_show_hidden()}
                         </div>
                         <div className="pt-4 pb-3 border-t border-gray-200">
                             <div className="flex items-center px-4 sm:px-6">
