@@ -130,7 +130,8 @@ function TabelUtangPiutang() {
             <MenuItem
           key={0}
           onClick={() => {
-              dispatch(set_lunas_utangpiutang(row.original.id))
+              dispatch(setinputmodalstatus({name:"set_done_utangpiutang",id:row.original.id}))
+              // dispatch(set_lunas_utangpiutang(row.original.id))
             // View profile logic...
             closeMenu();
           }}

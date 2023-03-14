@@ -39,6 +39,8 @@ function Statistik(props) {
     const stats = Data_Services.TRANSAKSI_STATS(data,
         utang_p.data.filter(v => !v.is_done), limit_date
     )
+
+    const stats_2 = Data_Services.TRANSAKSI_STATS(data.filter(v=>(v.is_protected==false && v.id_transfer==null && v.id_utang_piutang==null && !v.rekening_hidden)),[],limit_date)
     const data_harian = Data_Services.TRANSAKSI_DATE_FACTORY(data.sort((a, b) => {
         if (dayjs(a.trc_date).isBefore(dayjs(b.trc_date))) {
             return -1
@@ -131,9 +133,9 @@ function Statistik(props) {
 
                                                     <div
                                                         className={`bg-red-500 absolute top-0 left-0 flex h-full items-center justify-center rounded-2xl text-xs font-semibold text-white`}
-                                                        style={{width: `${Math.round(value.sum / stats[2].total * 100)}%`}}
+                                                        style={{width: `${Math.round(value.sum / stats_2[2].total * 100)}%`}}
                                                     >
-                                                        {Math.round(((value.sum / stats[2].total) + Number.EPSILON) * 1000) / 10}%
+                                                        {Math.round(((value.sum / stats_2[2].total) + Number.EPSILON) * 1000) / 10}%
 
                                                     </div
                                                     >

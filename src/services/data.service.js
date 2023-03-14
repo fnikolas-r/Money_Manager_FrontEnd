@@ -1,5 +1,6 @@
 import axios from 'axios'
 import AuthService from "../services/auth.service.js";
+import {data} from "autoprefixer";
 
 
 const {refresh_token} = AuthService;
@@ -179,8 +180,10 @@ const UtangPiutang = {
             return {status: 200, message: "Berhasil Menghapus Data"}
         })
     },
-    tandai_lunas(id) {
-        return api.post(this.URL + id + "/set_done/").then(response => response.data)
+    tandai_lunas(id,tujuan) {
+        return api.post(this.URL + id + "/set_done/",
+            {tujuan}
+            ).then(response => response.data)
     }
 
 }

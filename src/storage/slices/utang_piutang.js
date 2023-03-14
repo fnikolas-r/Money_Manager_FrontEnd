@@ -77,13 +77,15 @@ export const get_detail_utangpiutang = createAsyncThunk('utangpiutang/detail', a
         return thunkAPI.rejectWithValue("Terjadi Kesalahan");
     }
 })
-export const set_lunas_utangpiutang = createAsyncThunk('utangpiutang/set_lunas', async (id, thunkAPI) => {
+export const set_lunas_utangpiutang = createAsyncThunk('utangpiutang/set_lunas', async ({id,tujuan}, thunkAPI) => {
     try {
-        const data = await DataServices.UtangPiutang.tandai_lunas(id);
+        const data = await DataServices.UtangPiutang.tandai_lunas(id,tujuan)
+        thunkAPI.dispatch(resetinputmodal())
         thunkAPI.dispatch(get_rekening())
         thunkAPI.dispatch(get_summary_rekening())
         thunkAPI.dispatch(get_utangpiutang())
         thunkAPI.dispatch(get_transaksi())
+
         return data;
     } catch (e) {
         const message = e.response.data.detail || e.toString();

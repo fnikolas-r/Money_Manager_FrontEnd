@@ -15,6 +15,7 @@ import {delete_transaksi} from "../../../storage/slices/transaksi.js";
 import Transfer, {delete_transfer} from "../../../storage/slices/transfer";
 import TransferInput from "./forms_view/Input/TransferInput";
 import {delete_utangpiutang} from "../../../storage/slices/utang_piutang.js";
+import SetDoneModals from "./forms_view/SetDoneModals";
 
 function render_name(name) {
     switch (name) {
@@ -59,6 +60,9 @@ function render_name(name) {
         case "delete_rekening":
             return <FormInput><DeleteModals dispatcher={delete_rekening}/></FormInput>
             break;
+        case "set_done_utangpiutang":
+            return <FormInput><SetDoneModals/></FormInput>;
+        break;
         case "delete_kategori":
             return <FormInput><DeleteModals dispatcher={delete_kategori}/></FormInput>
             break;
