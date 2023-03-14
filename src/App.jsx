@@ -22,17 +22,17 @@ function App() {
     const {isLoggedIn} = useSelector(state => state.auth);
     const dispatch = useDispatch();
 
-    useEffect(()=>{
-        if (isLoggedIn) {
-
-            dispatch(get_rekening())
-            dispatch(get_transaksi())
-            dispatch(get_kategori())
-            dispatch(get_utangpiutang())
-            dispatch(get_summary_rekening())
-            dispatch(get_transfer())
-        }
-    },[isLoggedIn])
+    // useEffect(()=>{
+    //     if (isLoggedIn) {
+    //
+    //         dispatch(get_rekening())
+    //         dispatch(get_transaksi())
+    //         dispatch(get_kategori())
+    //         dispatch(get_utangpiutang())
+    //         dispatch(get_summary_rekening())
+    //         dispatch(get_transfer())
+    //     }
+    // },[isLoggedIn])
     return (
         <>
             <ToastContainer/>

@@ -29,19 +29,30 @@ export const register = createAsyncThunk(
         }
     })
 
+export const bootstrap = createAsyncThunk(
+    "auth/loading",
+    async (_,thunkAPI)=>{
+        try {
+            await thunkAPI.dispatch(get_rekening())
+      await thunkAPI.dispatch(get_transaksi())
+      await thunkAPI.dispatch(get_kategori())
+      await thunkAPI.dispatch(get_utangpiutang())
+      await thunkAPI.dispatch(get_summary_rekening())
+      await thunkAPI.dispatch(get_transfer())
+            return true;
+        }catch (e) {
+            thunkAPI.dispatch(setMessage({status:400,message:"Terjadi Kesalahan "}));
+        }
+        return  false;
+    }
+)
 export const login = createAsyncThunk(
   "auth/login",
   async ({ username, password ,remember_me}, thunkAPI) => {
     try {
       const user_token = await AuthService.login(username, password);
       const user_data = await AuthService.request_profile();
-      await thunkAPI.dispatch(get_rekening())
-      await thunkAPI.dispatch(get_transaksi())
-      await thunkAPI.dispatch(get_kategori())
-      await thunkAPI.dispatch(get_utangpiutang())
-      await thunkAPI.dispatch(get_summary_rekening())
-      await thunkAPI.dispatch(get_transfer())
-        await thunkAPI.dispatch(setMessage({message:"Berhasil Login",status:200}))
+        await thunkAPI.dispatch(setMessage({message:"Berhasil Memproses Data",status:200}))
       return {user:user_data, token:user_token};
     } catch (e) {
         const pesan1 = (e.response.data.username ?? "")+ (e.response.data.password ?? "" )
@@ -63,8 +74,8 @@ export const logout = createAsyncThunk(
 const user_token = JSON.parse(localStorage.getItem('user-token'))
 const user_data = JSON.parse(localStorage.getItem("user-data"))
 const initialState = (user_token && user_data)
-  ? { isLoggedIn: true, user:user_data, token: user_token }
-  : { isLoggedIn: false,user:null,token: null };
+  ? { isLoggedIn: true, user:user_data, token: user_token ,isLoading:true}
+  : { isLoggedIn: false,user:null,token: null,isLoading:true };
 
 const authSlice = createSlice({
     name:"auth",
@@ -73,6 +84,9 @@ const authSlice = createSlice({
     [register.rejected]: (state, action) => {
       state.isLoggedIn = false;
     },
+      [bootstrap.fulfilled]:(state)=>{
+        state.isLoading = false;
+      },
     [login.fulfilled]: (state, action) => {
       state.isLoggedIn = true;
       state.token = action.payload.token;
