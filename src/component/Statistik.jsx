@@ -62,7 +62,7 @@ function Statistik(props) {
                         bottom: 30,
                     },
                 }
-            }, maintainAspectRatio: false
+            }, maintainAspectRatio: false, responsive:true
         }
     }
     return (<>
@@ -95,12 +95,12 @@ function Statistik(props) {
                 </dl>
             </div>
             <div className="md:p-10 overflow-y-auto">
-                <div className="grid sm:grid-cols-1 md:grid-cols-2 md:h-[40vh]">
+                <div className="grid  md:grid-cols-2 ">
                     {/*TODO:Konversi ini ke nivo*/}
-                    <div className="">
+                    <div className="h-[80vh] md:h-[50vh]">
                         <Pie data={data_pengeluaran} options={generate_option("Transaksi Pengeluaran")}/>
                     </div>
-                    <div className="">
+                    <div className="h-[80vh] md:h-[50vh]">
                         <Pie data={data_pendapatan} options={generate_option("Transaksi Pendapatan")}/>
                     </div>
 
