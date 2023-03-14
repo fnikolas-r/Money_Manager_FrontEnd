@@ -32,11 +32,11 @@ function Statistik(props) {
     const utang_p = useSelector(state => state.utangpiutang)
     const {show_hidden_account} = useSelector(state => state.component)
 
-    var data = transaksi.data.filter(v => show_hidden_account ? true : !(v.rekening_hidden) && (v.id_transfer == null))
+    var data = transaksi.data.filter(v => show_hidden_account ? true : !(v.rekening_hidden))
 
     const data_pengeluaran = Data_Services.TRANSAKSI_DATA_FACTORY(data, -1, "Pengeluaran", true, limit_date)
     const data_pendapatan = Data_Services.TRANSAKSI_DATA_FACTORY(data, 1, "Pendapatan", true, limit_date)
-    const stats = Data_Services.TRANSAKSI_STATS(data.filter(item => item.kategori != null || item.id_utang_piutang != null || item.id_transfer == null || item.is_protected),
+    const stats = Data_Services.TRANSAKSI_STATS(data,
         utang_p.data.filter(v => !v.is_done), limit_date
     )
     const data_harian = Data_Services.TRANSAKSI_DATE_FACTORY(data.sort((a, b) => {
