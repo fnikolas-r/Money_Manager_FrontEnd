@@ -31,6 +31,8 @@ export default function TransaksiInput(props) {
     const transaksi = useSelector(state => state.transaksi)
     const {detail} = transaksi;
 
+    const [trc_type, setTrc_type] = useState("1");
+
 
     const {register, getValues,setValue,handleSubmit, formState: {errors}} = useForm({
             resolver:yupResolver(schema),
@@ -57,7 +59,6 @@ export default function TransaksiInput(props) {
         }
     }
 
-    const [kategori_list, setKategori_list] = useState(kategori.data);
 
     return <form onSubmit={handleSubmit(handle_transaksi)}>
         <div className="mt-6 gap-y-6 gap-x-4 sm:grid-cols-6">
@@ -135,9 +136,9 @@ export default function TransaksiInput(props) {
                     <select
                         {...register("trc_type")}
                         onChange={(event)=>{
-                            setKategori_list(kategori_data.filter((val)=>(val.jenis==event.target.value || val.jenis==null)))
+                            setTrc_type(event.target.value)
                         }}
-                        defaultValue={1}
+                        defaultValue={"1"}
                         className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                     >
                         <option value={"1"}>Pendapatan</option>
@@ -154,7 +155,7 @@ export default function TransaksiInput(props) {
                         {...register("kategori")}
                         className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                     >
-                    {kategori_list.map(item=>{
+                    {kategori_data.filter((val)=>(val.jenis==trc_type || val.jenis==null)).map(item=>{
                         return <option key={item.id} value={item.id}>{item.name}</option>
                     })}
                     </select>

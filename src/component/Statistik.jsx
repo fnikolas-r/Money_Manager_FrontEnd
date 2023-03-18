@@ -1,4 +1,4 @@
-import React, {PureComponent, useState} from 'react';
+import React, {useState} from 'react';
 import {
     Chart as ChartJS,
     ArcElement,
@@ -19,6 +19,7 @@ import Stats from "./MicroComponent/Stats.jsx";
 import dayjs from "dayjs";
 import FloatButton from "./MicroComponent/FloatButton";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import Datepicker from "react-tailwindcss-datepicker";
 
 ChartJS.register(ArcElement, Tooltip, Legend, Title, CategoryScale,
     LinearScale,
@@ -31,16 +32,21 @@ function Statistik(props) {
     const transaksi = useSelector(state => state.transaksi)
     const utang_p = useSelector(state => state.utangpiutang)
     const {show_hidden_account} = useSelector(state => state.component)
+    const [tanggal, setTanggal] = useState({startDate: new Date(), endDate: new Date()});
+    const [tanggal_main, setTanggal_main] = useState({startDate: new Date(), endDate: new Date()});
+
+    const handleValueChange = (newValue) => {setTanggal(newValue);}
+    const handleTangalUtama = (newValue) => {setTanggal_main(newValue);}
 
     var data = transaksi.data.filter(v => show_hidden_account ? true : !(v.rekening_hidden))
 
-    const data_pengeluaran = Data_Services.TRANSAKSI_DATA_FACTORY(data, -1, "Pengeluaran", true, limit_date)
-    const data_pendapatan = Data_Services.TRANSAKSI_DATA_FACTORY(data, 1, "Pendapatan", true, limit_date)
+    const data_pengeluaran = Data_Services.TRANSAKSI_DATA_FACTORY(data, -1, "Pengeluaran", true, limit_date=="custom" ? tanggal_main : limit_date)
+    const data_pendapatan = Data_Services.TRANSAKSI_DATA_FACTORY(data, 1, "Pendapatan", true, limit_date=="custom" ? tanggal_main : limit_date)
     const stats = Data_Services.TRANSAKSI_STATS(data,
-        utang_p.data.filter(v => !v.is_done), limit_date
+        utang_p.data.filter(v => !v.is_done), limit_date=="custom" ? tanggal_main : limit_date
     )
 
-    const stats_2 = Data_Services.TRANSAKSI_STATS(data.filter(v=>(v.is_protected==false && v.id_transfer==null && v.id_utang_piutang==null && !v.rekening_hidden)),[],limit_date)
+    const stats_2 = Data_Services.TRANSAKSI_STATS(data.filter(v=>(v.is_protected==false && v.id_transfer==null && v.id_utang_piutang==null && !v.rekening_hidden)),[],limit_date=="custom" ? tanggal_main : limit_date)
     const data_harian = Data_Services.TRANSAKSI_DATE_FACTORY(data.sort((a, b) => {
         if (dayjs(a.trc_date).isBefore(dayjs(b.trc_date))) {
             return -1
@@ -49,7 +55,7 @@ function Statistik(props) {
             return 1
         }
         return 0
-    }), jenis_filter)
+    }), jenis_filter !="custom" ? jenis_filter : tanggal )
     const generate_option = (title) => {
         return {
             plugins: {
@@ -70,7 +76,8 @@ function Statistik(props) {
 
         <div className="mx-4 mb-10">
             <div className="p-10 overflow-y-auto">
-                <div className="">
+                <div className="md:flex my-5">
+                    <div className="grow md:w-60 ">
                     <select onChange={(e) => {
                         setLimit_date(e.target.value)
                     }}
@@ -82,7 +89,14 @@ function Statistik(props) {
                         <option value={"3-months"}>3 Bulan yang Lalu</option>
                         <option value={"1-year"}>1 Tahun yang Lalu</option>
                         <option value={"5-years"}>5 Tahun yang Lalu</option>
+                        <option value={"custom"}>Custom</option>
                     </select>
+                </div>
+                    <div className="grow md:w-30 ">
+                                        {limit_date=="custom"?<div className="">
+                    <Datepicker value={tanggal_main} onChange={handleTangalUtama}/>
+                </div>:<></>}
+                    </div>
                 </div>
                 <h3 className="text-lg leading-6 font-medium text-gray-900">Total</h3>
 
@@ -118,7 +132,7 @@ function Statistik(props) {
                                 </Disclosure.Button>
                                 <Disclosure.Panel>
                                     {
-                                        Data_Services.TRANSAKSI_SUM(transaksi.data).sort((a, b) => {
+                                        Data_Services.TRANSAKSI_SUM(transaksi.data,-1,false,10,limit_date=="custom" ? tanggal_main : limit_date).sort((a, b) => {
                                             if (a.sum < b.sum) {
                                                 return 1
                                             } else if (a.sum > b.sum) {
@@ -151,17 +165,30 @@ function Statistik(props) {
                 </div>
                 <div className="md:p-10">
                     <div className=" h-[70vh]">
-                        Tentukan Periode <br/>
+                        <div className="md:flex">
+                            <div className="grow md:w-80">
+                                                        Tentukan Periode <br/>
                         <select onChange={val => {
                             setJenis_filter(val.target.value)
-                        }}>
+                        }}
+                            defaultValue={"daily"}
+
+                        >
                             <option value="7days">7 Hari Terakhir</option>
                             <option value="daily" defaultValue={true}>30 Hari Terakhir</option>
                             <option value="weekly">30 Minggu Terakhir</option>
                             <option value="monthly">12 Bulan Terakhir</option>
                             <option value="annual">5 Tahun Terakhir</option>
                             <option value="all">Semuanya</option>
+                            <option value={"custom"}>Custom</option>
                         </select>
+                            </div>
+                            <div className="grow md:w-15 sm:mt-3">
+                                {jenis_filter=="custom"?<div className="mt-5">
+                                    <Datepicker value={tanggal} onChange={handleValueChange}/>
+                                </div>:<></>}
+                            </div>
+                        </div>
                         <Line data={data_harian} options={generate_option("Transaksi Pengeluaran perTanggal")}/>
                     </div>
                 </div>
