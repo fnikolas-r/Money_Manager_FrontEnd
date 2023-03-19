@@ -19,9 +19,10 @@ export default function Loading({children}){
                 }, 3000)
         };
     }, []);
-
     const dispatch = useDispatch();
-       dispatch(bootstrap());
+    useEffect(()=>{
+        dispatch(bootstrap());
+    },[])
 
        return <>
         <div className="flex content-center items-center animate-pulse h-[100vh] m-0 p-0">

@@ -1,12 +1,15 @@
-import React, {useMemo} from 'react';
+import React, {useMemo, useState} from 'react';
 import MaterialReactTable from 'material-react-table';
 import dayjs from "dayjs";
 import {useDispatch, useSelector} from "react-redux";
 import {setinputmodalstatus} from "../../../storage/slices/component.js";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import Data_Services from "../../../services/function.service.js";
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 function TabelTransaksi() {
+    const [selectedDate, setSelectedDate] = useState(null);
     const dispatch = useDispatch()
     const transaksi = useSelector(state => state.transaksi)
     const data_transaksi = transaksi.data
@@ -21,9 +24,9 @@ function TabelTransaksi() {
                 accessorKey: 'trc_type',
                 header: 'Jenis Transaksi',
                 Cell: ({cell}) => {
-                    var text= "Pengeluaran"
+                    var text = "Pengeluaran"
                     var color = "text-red-500"
-                    if(cell.getValue() == 1 ){
+                    if (cell.getValue() == 1) {
                         text = "Pendapatan"
                         color = "text-green-500"
                     }
@@ -34,8 +37,8 @@ function TabelTransaksi() {
             {
                 accessorKey: 'price', //normal accessorKey
                 header: 'Harga',
-                Cell :({cell})=>{
-                          return new Intl.NumberFormat("id-ID", {style: "currency", currency: "IDR"}).format(cell.getValue())
+                Cell: ({cell}) => {
+                    return new Intl.NumberFormat("id-ID", {style: "currency", currency: "IDR"}).format(cell.getValue())
                 }
             },
             {
@@ -44,6 +47,20 @@ function TabelTransaksi() {
                 Cell: ({cell}) => {
                     return dayjs(cell.getValue()).format('YYYY-MM-DD (hh:mm),dddd')
                 },
+                Filter :({header}) =>(
+                    <input
+                        type={"date"}
+                        className={"border border-1 rounded-xl h-10"}
+                        value={header.column.getFilterValue() ?? ""}
+                        onChange={(e) => header.column.setFilterValue(e.target.value || undefined)}
+                        />
+                    ),
+
+                filterFN : (row,_columnIds,filterValue)=>{
+                    if(filterValue==""){ return true}
+                    return dayjs(row.getValue('trc_date')) == dayjs(filterValue)
+                }
+
             },
             {
                 accessorKey: 'rekening',
@@ -76,8 +93,8 @@ function TabelTransaksi() {
                 },
                 id: 'id',
                 header: 'Action',
-                size:50,
-                enableSorting:false,
+                size: 50,
+                enableSorting: false,
                 Cell: ({cell}) => {
                     const val = cell.getValue()
                     if (val == "protected") {
@@ -101,7 +118,8 @@ function TabelTransaksi() {
 
     return <div className="px-4 sm:px-6 lg:px-8">
         <h1 className="text-xl font-semibold text-gray-900 mb-3">Tabel Transaksi</h1>
-        <MaterialReactTable columns={columns} data={data_transaksi} initialState={{pagination:{ pageIndex: 0, pageSize: 5 }, }} />
+        <MaterialReactTable columns={columns} data={data_transaksi}
+                            initialState={{pagination: {pageIndex: 0, pageSize: 5},}}/>
     </div>
 
 

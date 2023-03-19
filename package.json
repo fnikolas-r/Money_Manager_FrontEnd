@@ -20,6 +20,7 @@
     "@hookform/resolvers": "^2.9.11",
     "@mui/icons-material": "^5.11.9",
     "@mui/material": "^5.11.10",
+    "@mui/x-date-pickers": "^6.0.2",
     "@react-buddy/ide-toolbox": "^2.3.1",
     "@reduxjs/toolkit": "^1.9.1",
     "axios": "^1.2.4",
