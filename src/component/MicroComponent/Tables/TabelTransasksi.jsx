@@ -9,7 +9,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 function TabelTransaksi() {
-    const [selectedDate, setSelectedDate] = useState(null);
     const dispatch = useDispatch()
     const transaksi = useSelector(state => state.transaksi)
     const data_transaksi = transaksi.data
@@ -51,14 +50,16 @@ function TabelTransaksi() {
                     <input
                         type={"date"}
                         className={"border border-1 rounded-xl h-10"}
-                        value={header.column.getFilterValue() ?? ""}
-                        onChange={(e) => header.column.setFilterValue(e.target.value || undefined)}
+                        defaultValue={header.column.getFilterValue() ?? ""}
+                        onChange={(e) => {
+                            header.column.setFilterValue(e.target.value || "")
+                        }}
                         />
                     ),
 
-                filterFN : (row,_columnIds,filterValue)=>{
+                filterFn : (row,_columnIds,filterValue)=>{
                     if(filterValue==""){ return true}
-                    return dayjs(row.getValue('trc_date')).isSame(dayjs(filterValue))
+                    return dayjs(row.getValue('trc_date')).isSame(dayjs(filterValue),'day')
                 }
 
             },
