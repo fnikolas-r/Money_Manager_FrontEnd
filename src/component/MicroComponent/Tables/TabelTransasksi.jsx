@@ -58,7 +58,7 @@ function TabelTransaksi() {
 
                 filterFN : (row,_columnIds,filterValue)=>{
                     if(filterValue==""){ return true}
-                    return dayjs(row.getValue('trc_date')) == dayjs(filterValue)
+                    return dayjs(row.getValue('trc_date')).isSame(dayjs(filterValue))
                 }
 
             },
