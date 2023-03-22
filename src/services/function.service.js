@@ -6,22 +6,26 @@ dayjs.extend(AdvancedFormat)
 dayjs.extend(WeekofYear)
 
 function filter_date(data,recap_by){
-    var data_filter = data.map(value=>{
-                 return {...value, trc_date:dayjs(value.trc_date).format("DD/MM/YYYY").toString()}
-             })
+    var data_filter;
     var limit;
 
     switch (recap_by) {
          case "all":
+             data_filter = data.map(value=>{
+                return {...value, trc_date:dayjs(value.trc_date).format("DD/MM/YYYY").toString()}
+            })
              limit = "all"
              break;
 
          case "7days":
              limit = 7
+             data_filter = data.filter(value=>(dayjs(value.trc_date).isAfter(dayjs().subtract(7,'days')))).map(value=>{
+                return {...value, trc_date:dayjs(value.trc_date).format("DD/MM/YYYY").toString()}
+            })
              break;
          case 'weekly':
              limit = 30
-             data_filter = data.map(value=>{
+             data_filter = data.filter(value=>(dayjs(value.trc_date).isAfter(dayjs().subtract(30,'weeks')))).map(value=>{
                  return {...value, trc_date:`Week-Y:${dayjs(value.trc_date).format("ww-YYYY ").toString()}`}
              })
              break
@@ -33,11 +37,14 @@ function filter_date(data,recap_by){
              break;
          case "annual":
              limit=5
-             data_filter = data.map(value=>{
+             data_filter = data.filter(v=>(dayjs(v.trc_date).isAfter(dayjs().subtract(5,'years')))).map(value=>{
                  return {...value, trc_date:dayjs(value.trc_date).format("YYYY").toString()}
              })
              break
          default:
+            data_filter = data.filter(v=>(dayjs(v.trc_date).isAfter(dayjs().subtract(30,'days')))).map(value=>{
+                return {...value, trc_date:dayjs(value.trc_date).format("DD/MM/YYYY").toString()}
+            })
              limit =30
      }
      return {
