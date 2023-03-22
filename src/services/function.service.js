@@ -28,38 +28,47 @@ function filter_date(data, recap_by) {
         }
     }
     switch (recap_by) {
-        case "all":
-            limit = "all"
-            break;
+         case "all":
+             data_filter = data.map(value=>{
+                return {...value, trc_date:dayjs(value.trc_date).format("DD/MM/YYYY").toString()}
+            })
+             limit = "all"
+             break;
 
-        case "7days":
-            limit = 7
-            break;
-        case 'weekly':
-            limit = 30
-            data_filter = data.map(value => {
-                return {...value, trc_date: `Week-Y:${dayjs(value.trc_date).format("ww-YYYY ").toString()}`}
+         case "7days":
+             limit = 7
+             data_filter = data.filter(value=>(dayjs(value.trc_date).isAfter(dayjs().subtract(7,'days')))).map(value=>{
+                return {...value, trc_date:dayjs(value.trc_date).format("DD/MM/YYYY").toString()}
             })
-            break
-        case "monthly":
-            limit = 12
-            data_filter = data.map(value => {
-                return {...value, trc_date: dayjs(value.trc_date).format("MM/YYYY").toString()}
+             break;
+         case 'weekly':
+             limit = 30
+             data_filter = data.filter(value=>(dayjs(value.trc_date).isAfter(dayjs().subtract(30,'weeks')))).map(value=>{
+                 return {...value, trc_date:`Week-Y:${dayjs(value.trc_date).format("ww-YYYY ").toString()}`}
+             })
+             break
+         case "monthly":
+             limit=12
+             data_filter = data.map(value=>{
+                 return {...value, trc_date:dayjs(value.trc_date).format("MM/YYYY").toString()}
+             })
+             break;
+         case "annual":
+             limit=5
+             data_filter = data.filter(v=>(dayjs(v.trc_date).isAfter(dayjs().subtract(5,'years')))).map(value=>{
+                 return {...value, trc_date:dayjs(value.trc_date).format("YYYY").toString()}
+             })
+             break
+         default:
+            data_filter = data.filter(v=>(dayjs(v.trc_date).isAfter(dayjs().subtract(30,'days')))).map(value=>{
+                return {...value, trc_date:dayjs(value.trc_date).format("DD/MM/YYYY").toString()}
             })
-            break;
-        case "annual":
-            limit = 5
-            data_filter = data.map(value => {
-                return {...value, trc_date: dayjs(value.trc_date).format("YYYY").toString()}
-            })
-            break
-        default:
-            limit = 30
-    }
-    return {
-        data_filter: data_filter,
-        limit: limit
-    }
+             limit =30
+     }
+     return {
+        data_filter:data_filter,
+         limit:limit
+     }
 }
 
 function date_range(data, recap_by) {
