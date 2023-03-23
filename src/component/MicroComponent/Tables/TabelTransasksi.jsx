@@ -4,14 +4,14 @@ import dayjs from "dayjs";
 import {useDispatch, useSelector} from "react-redux";
 import {setinputmodalstatus} from "../../../storage/slices/component.js";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+
 
 function TabelTransaksi() {
     const dispatch = useDispatch()
     const transaksi = useSelector(state => state.transaksi)
     const data_transaksi = transaksi.data
+    const rekening = useSelector(state=>state.rekning)
+
     //should be memoized or stable
     const columns = useMemo(
         () => [
@@ -31,6 +31,22 @@ function TabelTransaksi() {
                     }
                     return <span className={color}>{text}</span>
                 },
+                Filter :({header}) =>(
+                    <select className="border border-1 rounded-xl h-10" onChange={(e) => {
+                        header.column.setFilterValue(e.target.value || "")
+                    }}
+                        defaultValue={'all'}
+                    >
+                        <option value={'all'}>Semua</option>
+                        <option value={-1}>Pengeluaran</option>
+                        <option value={1}>Pendapatan</option>
+                    </select>
+                    ),
+
+                filterFn : (row,_columnIds,filterValue)=>{
+                    if(filterValue=='all'){ return true}
+                    return row.getValue("trc_type") == filterValue
+                }
 
             },
             {
@@ -65,8 +81,7 @@ function TabelTransaksi() {
             },
             {
                 accessorKey: 'rekening',
-                header: 'Rekening'
-            },
+                header: 'Rekening'            },
             {
                 accessorKey: 'kategori',
                 header: 'Kategori',

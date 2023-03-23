@@ -32,6 +32,21 @@ function TabelTransfer() {
                 header: 'Tanggal Transfer',
                 Cell: ({cell}) => {
                     return dayjs(cell.getValue()).format('YYYY-MM-DD (hh:mm),dddd')
+                },
+                Filter :({header}) =>(
+                    <input
+                        type={"date"}
+                        className={"border border-1 rounded-xl h-10"}
+                        defaultValue={header.column.getFilterValue() ?? ""}
+                        onChange={(e) => {
+                            header.column.setFilterValue(e.target.value || "")
+                        }}
+                        />
+                    ),
+
+                filterFn : (row,_columnIds,filterValue)=>{
+                    if(filterValue==""){ return true}
+                    return dayjs(row.getValue('tgl_transfer')).isSame(dayjs(filterValue),'day')
                 }
             },
             {

@@ -26,6 +26,22 @@ function TabelUtangPiutang() {
                         color = "text-green-500"
                     }
                     return <span className={color}><strong>{tipe}</strong></span>
+                },
+                Filter :({header}) =>(
+                    <select className="border border-1 rounded-xl h-10" onChange={(e) => {
+                        header.column.setFilterValue(e.target.value || "")
+                    }}
+                        defaultValue={false}
+                    >
+                        <option value={'all'}>Semua</option>
+                        <option value={true}>Lunas</option>
+                        <option value={false}>Belum Lunas</option>
+                    </select>
+                    ),
+
+                filterFn : (row,_columnIds,filterValue)=>{
+                    if(filterValue=='all'){ return true}
+                    return row.getValue("is_done") === (filterValue == 'true')
                 }
             },
             {
@@ -82,6 +98,20 @@ function TabelUtangPiutang() {
                     }
 
                     return <span className={color}>{status}</span>
+                }, Filter :({header}) =>(
+                    <input
+                        type={"date"}
+                        className={"border border-1 rounded-xl h-10"}
+                        defaultValue={header.column.getFilterValue() ?? ""}
+                        onChange={(e) => {
+                            header.column.setFilterValue(e.target.value || "")
+                        }}
+                        />
+                    ),
+
+                filterFn : (row,_columnIds,filterValue)=>{
+                    if(filterValue==""){ return true}
+                    return dayjs(row.getValue('due_date')).isSame(dayjs(filterValue),'day')
                 }
             },
             {
@@ -124,7 +154,6 @@ function TabelUtangPiutang() {
         <MaterialReactTable columns={columns} data={data_table} enableRowActions
                             initialState={
             {pagination:{ pageIndex: 0, pageSize: 5 },
-                columnVisibility: { is_done: false }
             }}
         renderRowActionMenuItems={({ closeMenu,row }) => [
             <MenuItem

@@ -111,9 +111,9 @@ const TRANSAKSI_SUM = (data, jenis = -1, sorted = false, limit = 10, recap_by = 
     if (sorted) {
         result = result.sort((a, b) => {
             if (a.sum < b.sum) {
-                return -1
-            } else if (a.sum > b.sum) {
                 return 1
+            } else if (a.sum > b.sum) {
+                return -1
             } else {
                 return 0
             }
@@ -166,7 +166,7 @@ const DYNAMIC_COLOR = (hex = false) => {
 }
 
 const TRANSAKSI_DATA_FACTORY = (data, jenis, title = "", sorted = false, recap_by = 'all') => {
-    const data_trc = TRANSAKSI_SUM(date_range(data, recap_by), jenis, sorted)
+    const data_trc = TRANSAKSI_SUM(date_range(data, recap_by), jenis, sorted,10,recap_by)
     return {
         labels: data_trc.map(value => {
             return value.rekening
