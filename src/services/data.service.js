@@ -184,6 +184,11 @@ const UtangPiutang = {
         return api.post(this.URL + id + "/set_done/",
             {tujuan}
             ).then(response => response.data)
+    },
+    split_bill(due_date,type,tgl_transaksi,keterangan,rekening,split_bills){
+        return api.post(this.URL+"split_bill/",{
+            due_date,type,tgl_transaksi,keterangan,rekening,split_bills
+        }).then(response=>response.data)
     }
 
 }

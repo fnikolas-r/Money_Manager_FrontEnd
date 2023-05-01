@@ -34,6 +34,7 @@ export const bootstrap = createAsyncThunk(
     async (_,thunkAPI)=>{
         try {
             await thunkAPI.dispatch(get_rekening())
+            await thunkAPI.dispatch(get_rekening())
       await thunkAPI.dispatch(get_transaksi())
       await thunkAPI.dispatch(get_kategori())
       await thunkAPI.dispatch(get_utangpiutang())
@@ -91,6 +92,9 @@ const authSlice = createSlice({
       state.isLoggedIn = true;
       state.token = action.payload.token;
       state.user = action.payload.user
+    },
+    [login.pending]:(state,action)=>{
+      state.isLoading = true;
     },
     [login.rejected]: (state, action) => {
       state.isLoggedIn = false;

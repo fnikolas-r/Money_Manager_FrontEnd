@@ -16,6 +16,8 @@ import Transfer, {delete_transfer} from "../../../storage/slices/transfer";
 import TransferInput from "./forms_view/Input/TransferInput";
 import {delete_utangpiutang} from "../../../storage/slices/utang_piutang.js";
 import SetDoneModals from "./forms_view/SetDoneModals";
+import ListMenu from "./modals_view/ListMenu.jsx";
+import SplitBillInput from "./forms_view/Input/SplitBillInput";
 
 function render_name(name) {
     switch (name) {
@@ -50,7 +52,9 @@ function render_name(name) {
         case "input_utangpiutang":
             return <FormInput><UtangPiutangInput/></FormInput>
             break;
-
+        case "input_split_bill":
+            return <FormInput><SplitBillInput/></FormInput>
+            break;
         case "list_rekening":
             return <ListRekening/>
             break;
@@ -76,6 +80,10 @@ function render_name(name) {
             case "delete_utangpiutang":
             return <FormInput><DeleteModals dispatcher={delete_utangpiutang}/></FormInput>
             break;
+
+            case "input_extra_menu":
+                return <ListMenu/>
+                break;
     }
 }
 

@@ -6,11 +6,12 @@ import {
     Legend,
     Title,
     LinearScale,
+    BarElement,
     PointElement,
     LineElement,
     CategoryScale
 } from 'chart.js';
-import {Pie, Line} from 'react-chartjs-2';
+import {Pie, Line,Bar} from 'react-chartjs-2';
 import {Disclosure} from "@headlessui/react";
 import Navbar from "./MicroComponent/Navbar/Navbar";
 import Data_Services from "../services/function.service.js";
@@ -24,6 +25,7 @@ import Datepicker from "react-tailwindcss-datepicker";
 ChartJS.register(ArcElement, Tooltip, Legend, Title, CategoryScale,
     LinearScale,
     PointElement,
+    BarElement,
     LineElement)
 
 function Statistik(props) {
@@ -45,6 +47,10 @@ function Statistik(props) {
     const stats = Data_Services.TRANSAKSI_STATS(data,
         utang_p.data.filter(v => !v.is_done), limit_date=="custom" ? tanggal_main : limit_date
     )
+
+    const data_tempat_by_price = Data_Services.TRANSAKSI_BY_PLACE_FACTORY(data,true,10,limit_date=="custom" ? tanggal_main : limit_date,'price')
+    const data_tempat_by_sum = Data_Services.TRANSAKSI_BY_PLACE_FACTORY(data,true,10,limit_date=="custom" ? tanggal_main : limit_date,'sum')
+
 
     const stats_2 = Data_Services.TRANSAKSI_STATS(data.filter(v=>(v.is_protected==false && v.id_transfer==null && v.id_utang_piutang==null && !v.rekening_hidden)),[],limit_date=="custom" ? tanggal_main : limit_date)
     const data_harian = Data_Services.TRANSAKSI_DATE_FACTORY(data.sort((a, b) => {
@@ -81,8 +87,12 @@ function Statistik(props) {
                     <select onChange={(e) => {
                         setLimit_date(e.target.value)
                     }}
-                    defaultValue={"all"}
+                    defaultValue={"this-month"}
                     >
+                        <option value={"this-month"}>Bulan Ini</option>
+                        <option value={"this-day"}>Hari Ini</option>
+                        <option value={"this-week"}>Minggu Ini</option>
+                        <option value={"this-year"}>Tahun Ini</option>
                         <option value={"all"}>Tampilkan Semua</option>
                         <option value={"7-days"}>1 Minggu Yang Lalu</option>
                         <option value={"1-month"}>1 Bulan yang Lalu</option>
@@ -163,6 +173,33 @@ function Statistik(props) {
 
                     </Disclosure>
                 </div>
+                <div className="grid mt-10">
+                    <Disclosure defaultOpen={true}>
+                        {({open}) => (
+                            <>
+                                <Disclosure.Button>
+                                    <h5 className="text-lg leading-6 font-medium text-gray-900">Top 10 Lokasi Pengeluaran Terbanyak
+                                        <FontAwesomeIcon icon="fa-solid fa-chevron-right"
+                                                         className={`ml-3 ${open ? 'rotate-90 transform' : ''}`}/>
+                                    </h5>
+                                </Disclosure.Button>
+                                <Disclosure.Panel>
+                                    <div className="grid  md:grid-cols-2 ">
+                                        {/*TODO:Konversi ini ke nivo*/}
+                                        <div className="h-[80vh] md:h-[50vh]">
+                                            <Bar data={data_tempat_by_price} options={generate_option("By Price")}/>
+                                        </div>
+                                        <div className="h-[80vh] md:h-[50vh]">
+                                            <Bar data={data_tempat_by_sum} options={generate_option("By Sum")}/>
+                                        </div>
+
+                                    </div>
+                                </Disclosure.Panel>
+                            </>
+                        )}
+
+                    </Disclosure>
+                </div>
                 <div className="md:p-10">
                     <div className=" h-[70vh]">
                         <div className="md:flex">
@@ -174,6 +211,7 @@ function Statistik(props) {
                             defaultValue={"daily"}
 
                         >
+                            <option value="this-month">Bulan Ini</option>
                             <option value="7days">7 Hari Terakhir</option>
                             <option value="daily" defaultValue={true}>30 Hari Terakhir</option>
                             <option value="weekly">30 Minggu Terakhir</option>

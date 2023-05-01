@@ -20,6 +20,9 @@ function TabelTransaksi() {
                 header: 'Nama Transaksi',
             },
             {
+                accessorKey: 'pelaku',
+                header: 'Pelaku Terkait'            },
+            {
                 accessorKey: 'trc_type',
                 header: 'Jenis Transaksi',
                 Cell: ({cell}) => {
@@ -80,9 +83,6 @@ function TabelTransaksi() {
 
             },
             {
-                accessorKey: 'rekening',
-                header: 'Rekening'            },
-            {
                 accessorKey: 'kategori',
                 header: 'Kategori',
                 Cell: ({cell}) => {
@@ -93,6 +93,9 @@ function TabelTransaksi() {
                     }
                 }
             },
+            {
+                accessorKey: 'rekening',
+                header: 'Rekening'            },
             {
                 accessorFn: (row) => {
                     var hasil = "transaksi_" + row.id

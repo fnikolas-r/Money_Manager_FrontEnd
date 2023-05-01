@@ -75,6 +75,16 @@ export default function FloatButton(props) {
                         <FontAwesomeIcon className="text-lg text-white" icon="fa-solid fa-face-meh-blank"/>
                     </button>
                 </li>
+                <li className="mb-3">
+                    <button className="z-[1000] rounded-full bg-blue-400 w-14 h-14"
+                    onClick={()=>{
+                        setIsMenuHover(false)
+                            dispatch(setinputmodalstatus({status:true,name:"input_extra_menu",id:null}))
+                        }}
+                    >
+                        <FontAwesomeIcon className="text-lg text-white" icon="fa-solid fa-house-laptop"/>
+                    </button>
+                </li>
             </ul>
         </Transition>
 

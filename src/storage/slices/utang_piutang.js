@@ -93,6 +93,20 @@ export const set_lunas_utangpiutang = createAsyncThunk('utangpiutang/set_lunas',
         return thunkAPI.rejectWithValue("Terjadi Kesalahan");
     }
 })
+
+export const split_bills = createAsyncThunk("utangpiutang/add", async ({due_date,type,tgl_transaksi,keterangan,rekening,split_bills}, thunkAPI) => {
+        try {
+            const data = await DataServices.UtangPiutang.split_bill(due_date,type,tgl_transaksi,keterangan,rekening,split_bills);
+            thunkAPI.dispatch(get_transaksi())
+            thunkAPI.dispatch(get_summary_rekening())
+            thunkAPI.dispatch(get_utangpiutang())
+            thunkAPI.dispatch(resetinputmodal())
+            return data;
+
+        } catch (e) {
+            return call_back(e,thunkAPI)
+        }
+    })
 const initialState = {
     detail:null,
     data:[]

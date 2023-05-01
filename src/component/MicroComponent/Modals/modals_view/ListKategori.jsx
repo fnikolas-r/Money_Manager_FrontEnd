@@ -3,11 +3,6 @@ import DefaultModal from "../DefaultModal.jsx";
 import React from "react";
 import {useEffect,useState} from "react";
 import ListView from "../ListView";
-import FormInput from "../FormInput";
-import RekeningInput from "../forms_view/Input/RekeningInput";
-import TransaksiInput from "../forms_view/Input/TransaksiInput";
-import KategoriInput from "../forms_view/Input/KategoriInput";
-import UtangPiutangInput from "../forms_view/Input/UtangPiutangInput";
 import {useSelector} from "react-redux";
 
 
