@@ -15,6 +15,7 @@ import {Pie, Line,Bar} from 'react-chartjs-2';
 import {Disclosure} from "@headlessui/react";
 import Navbar from "./MicroComponent/Navbar/Navbar";
 import Data_Services from "../services/function.service.js";
+import UtilServices from "../services/utils.service.js";
 import {useSelector} from "react-redux";
 import Stats from "./MicroComponent/Stats.jsx";
 import dayjs from "dayjs";
@@ -152,7 +153,7 @@ function Statistik(props) {
                                             }
                                         }).map(value => {
                                             return <div className="mb-8" key={value.rekening}>
-                                                {value.rekening}
+                                                {value.rekening} <span className="text-gray-500 text-sm">({UtilServices.to_rupiah(value.sum)})</span>
                                                 <div className="bg-gray-200 relative h-4 w-full rounded-2xl">
 
                                                     <div
