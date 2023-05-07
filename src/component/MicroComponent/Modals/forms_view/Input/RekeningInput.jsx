@@ -29,11 +29,11 @@ export default function RekeningInput(props) {
                 return person.toLowerCase().includes(query.toLowerCase())
             }).slice(0, 5)
 
-    const schema = yup.object({
+    const schema = yup.object().shape({
         name: yup.string().required().max(50),
         initial_deposit: yup.number().positive().integer().required(),
         is_hidden: yup.boolean().default(false)
-    }).required();
+    });
 
     const {register, setValue, handleSubmit, watch, formState: {errors}} = useForm({
             resolver: yupResolver(schema),
@@ -78,6 +78,7 @@ export default function RekeningInput(props) {
                         {...register("name")}
                         className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                     />
+                    {errors.name && <span className="text-red-500 text-sm">{errors.name?.message}</span>}
                 </div>
             </div>
 
@@ -91,6 +92,7 @@ export default function RekeningInput(props) {
                         {...register("initial_deposit")}
                         className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                     />
+                    {errors.initial_deposit && <span className="text-red-500 text-sm">{errors.initial_deposit?.message}</span>}
                 </div>
             </div>
 
@@ -106,6 +108,7 @@ export default function RekeningInput(props) {
                         <option value={false}>Regular Account</option>
                         <option value={true}>Hidden Account</option>
                     </select>
+                    {errors.is_hidden && <span className="text-red-500 text-sm">{errors.is_hidden?.message}</span>}
                 </div>
             </div>
 

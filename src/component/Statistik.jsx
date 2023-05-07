@@ -31,7 +31,7 @@ ChartJS.register(ArcElement, Tooltip, Legend, Title, CategoryScale,
 
 function Statistik(props) {
     const [jenis_filter, setJenis_filter] = useState("daily");
-    const [limit_date, setLimit_date] = useState('all');
+    const [limit_date, setLimit_date] = useState('this-month');
     const transaksi = useSelector(state => state.transaksi)
     const utang_p = useSelector(state => state.utangpiutang)
     const {show_hidden_account} = useSelector(state => state.component)

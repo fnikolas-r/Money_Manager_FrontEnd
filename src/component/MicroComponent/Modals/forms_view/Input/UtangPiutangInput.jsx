@@ -7,7 +7,7 @@ import {yupResolver} from "@hookform/resolvers/yup";
 import {logout} from "../../../../../storage/slices/auth.js";
 import {add_kategori, edit_kategori, get_detail_kategori} from "../../../../../storage/slices/kategori.js";
 import {add_transaksi, edit_transaksi, get_detail_transaksi} from "../../../../../storage/slices/transaksi.js";
-import {useEffect} from "react";
+import React, {useEffect} from "react";
 import dayjs from "dayjs";
 import {get_detail_transfer} from "../../../../../storage/slices/transfer.js";
 import {
@@ -35,7 +35,7 @@ export default function UtangPiutangInput(props) {
     const modal = useSelector(state => state.component)
     const {id, before} = modal.modalInputOpen;
 
-    const schema = yup.object().required(default_validation)
+    const schema = yup.object().shape(default_validation)
 
     const utang_piutang = useSelector(state => state.utangpiutang)
     const {detail} = utang_piutang;
@@ -50,36 +50,57 @@ export default function UtangPiutangInput(props) {
             if (detail.nominal === null) {
                 dispatch(get_detail_utangpiutang({id}))
             }
-                setValue("due_date", detail.due_date)
-                setValue("person_in_charge", detail.person_in_charge)
-                setValue("type", detail.type)
-                setValue("tgl_transaksi", detail.tgl_transaksi)
-                setValue("nominal", detail.nominal)
-                setValue("keterangan", detail.keterangan)
-                setValue("rekening", detail.rekening_id)
+            setValue("due_date", detail.due_date)
+            setValue("person_in_charge", detail.person_in_charge)
+            setValue("type", detail.type)
+            setValue("tgl_transaksi", detail.tgl_transaksi)
+            setValue("nominal", detail.nominal)
+            setValue("keterangan", detail.keterangan)
+            setValue("rekening", detail.rekening_id)
         }
 
     }, [id, detail])
     const handle_utang_piutang = (data) => {
         console.log(data)
         if (id) {
-            dispatch(edit_utangpiutang({...data, id,tgl_transaksi:dayjs(data.tgl_transaksi).format("YYYY-MM-DDTHH:mm").toString()}))
+            dispatch(edit_utangpiutang({
+                ...data,
+                id,
+                tgl_transaksi: dayjs(data.tgl_transaksi).format("YYYY-MM-DDTHH:mm").toString()
+            }))
         } else {
-            dispatch(add_utangpiutang({...data,tgl_transaksi:dayjs(data.tgl_transaksi).format("YYYY-MM-DDTHH:mm").toString()}))
+            dispatch(add_utangpiutang({
+                ...data,
+                tgl_transaksi: dayjs(data.tgl_transaksi).format("YYYY-MM-DDTHH:mm").toString()
+            }))
         }
     }
     return <form onSubmit={handleSubmit(handle_utang_piutang)}>
         <div className="mt-6 gap-y-6 gap-x-4 sm:grid-cols-6">
-            <div className="sm:col-span-3">
-                <label htmlFor="first-name" className="block text-sm font-medium text-gray-700">
-                    Nominal {getValues("type")}
-                </label>
-                <div className="mt-1">
-                    <input
-                        type="number"
-                        {...register("nominal")}
-                        className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                    />
+            <div className="flex mt-3 ">
+                <div className="sm:col-span-4 grow mr-1.5">
+                    <label htmlFor="first-name" className="block text-sm font-medium text-gray-700">
+                        Nominal {getValues("type")}
+                    </label>
+                    <div className="mt-1">
+                        <input
+                            type="number"
+                            {...register("nominal")}
+                            className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                        />
+                        {errors.nominal && <span className="text-red-500 text-sm">{errors.nominal?.message}</span>}
+                    </div>
+                </div>
+                <div className="sm:col-span-1 grow-0 justify-center align-center flex items-center mt-5">
+                    <button type={"button"}
+                        onClick={() => {
+                            const price = getValues("nominal")
+                            setValue("nominal", price * 1000)
+                        }
+                        }
+                        className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm"
+                    >X1.000
+                    </button>
                 </div>
             </div>
             <div className="flex mt-2">
@@ -93,6 +114,7 @@ export default function UtangPiutangInput(props) {
                             {...register("person_in_charge")}
                             className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                         />
+                        {errors.person_in_charge && <span className="text-red-500 text-sm">{errors.person_in_charge?.message}</span>}
                     </div>
                 </div>
                 <div className="sm:col-span-3 grow">
@@ -105,6 +127,7 @@ export default function UtangPiutangInput(props) {
                             {...register("keterangan")}
                             className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                         />
+                        {errors.keterangan && <span className="text-red-500 text-sm">{errors.keterangan?.message}</span>}
                     </div>
                 </div>
             </div>
@@ -118,6 +141,7 @@ export default function UtangPiutangInput(props) {
                         {...register("tgl_transaksi")}
                         className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                     />
+                    {errors.tgl_transaksi && <span className="text-red-500 text-sm">{errors.tgl_transaksi?.message}</span>}
                 </div>
             </div>
             <div className="sm:col-span-3 mt-3">
@@ -130,6 +154,7 @@ export default function UtangPiutangInput(props) {
                         {...register("due_date")}
                         className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                     />
+                    {errors.due_date && <span className="text-red-500 text-sm">{errors.due_date?.message}</span>}
                 </div>
             </div>
             <div className="flex mt-2">
@@ -163,7 +188,6 @@ export default function UtangPiutangInput(props) {
                     </div>
                 </div>
             </div>
-
 
 
         </div>

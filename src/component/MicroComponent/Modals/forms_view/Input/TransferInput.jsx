@@ -1,131 +1,3 @@
-//
-// export default function RekeningInput(props) {
-//     return <div className="mt-6 gap-y-6 gap-x-4 sm:grid-cols-6">
-//             <div className="sm:col-span-3">
-//               <label htmlFor="first-name" className="block text-sm font-medium text-gray-700">
-//                 First name
-//               </label>
-//               <div className="mt-1">
-//                 <input
-//                   type="text"
-//                   name="first-name"
-//                   id="first-name"
-//                   autoComplete="given-name"
-//                   className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-//                 />
-//               </div>
-//             </div>
-//
-//             <div className="sm:col-span-3">
-//               <label htmlFor="last-name" className="block text-sm font-medium text-gray-700">
-//                 Last name
-//               </label>
-//               <div className="mt-1">
-//                 <input
-//                   type="text"
-//                   name="last-name"
-//                   id="last-name"
-//                   autoComplete="family-name"
-//                   className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-//                 />
-//               </div>
-//             </div>
-//
-//             <div className="sm:col-span-4">
-//               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-//                 Email address
-//               </label>
-//               <div className="mt-1">
-//                 <input
-//                   id="email"
-//                   name="email"
-//                   type="email"
-//                   autoComplete="email"
-//                   className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-//                 />
-//               </div>
-//             </div>
-//
-//             <div className="sm:col-span-3">
-//               <label htmlFor="country" className="block text-sm font-medium text-gray-700">
-//                 Country
-//               </label>
-//               <div className="mt-1">
-//                 <select
-//                   id="country"
-//                   name="country"
-//                   autoComplete="country-name"
-//                   className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-//                 >
-//                   <option>United States</option>
-//                   <option>Canada</option>
-//                   <option>Mexico</option>
-//                 </select>
-//               </div>
-//             </div>
-//
-//             <div className="sm:col-span-6">
-//               <label htmlFor="street-address" className="block text-sm font-medium text-gray-700">
-//                 Street address
-//               </label>
-//               <div className="mt-1">
-//                 <input
-//                   type="text"
-//                   name="street-address"
-//                   id="street-address"
-//                   autoComplete="street-address"
-//                   className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-//                 />
-//               </div>
-//             </div>
-//
-//             <div className="sm:col-span-2">
-//               <label htmlFor="city" className="block text-sm font-medium text-gray-700">
-//                 City
-//               </label>
-//               <div className="mt-1">
-//                 <input
-//                   type="text"
-//                   name="city"
-//                   id="city"
-//                   autoComplete="address-level2"
-//                   className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-//                 />
-//               </div>
-//             </div>
-//
-//             <div className="sm:col-span-2">
-//               <label htmlFor="region" className="block text-sm font-medium text-gray-700">
-//                 State / Province
-//               </label>
-//               <div className="mt-1">
-//                 <input
-//                   type="text"
-//                   name="region"
-//                   id="region"
-//                   autoComplete="address-level1"
-//                   className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-//                 />
-//               </div>
-//             </div>
-//
-//             <div className="sm:col-span-2">
-//               <label htmlFor="postal-code" className="block text-sm font-medium text-gray-700">
-//                 ZIP / Postal code
-//               </label>
-//               <div className="mt-1">
-//                 <input
-//                   type="text"
-//                   name="postal-code"
-//                   id="postal-code"
-//                   autoComplete="postal-code"
-//                   className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-//                 />
-//               </div>
-//             </div>
-//           </div>
-// }
-
 
 import {modalbackto, resetinputmodal} from "../../../../../storage/slices/component.js";
 import {useDispatch, useSelector} from "react-redux";
@@ -146,13 +18,13 @@ export default function TransferInput(props) {
     const {detail} = useSelector(state=>state.transfer)
     const {id,before} = modalInputOpen
 
-    const schema = yup.object({
+    const schema = yup.object().shape({
         keterangan: yup.string().required().max(10),
         nominal: yup.number().positive().integer(),
         tgl_transfer: yup.date().required().max(dayjs().add(1,'hour').toDate()),
         from_account: yup.string().required(),
         to_account: yup.string().required().notOneOf([yup.ref('from_account'), null], 'Rekening yang dituju tidak boleh sama'),
-    }).required();
+    })
 
 
     const {register, setValue, handleSubmit, formState: {errors}} = useForm({
@@ -193,6 +65,7 @@ export default function TransferInput(props) {
                             {...register("keterangan")}
                             className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                         />
+                        {errors.keterangan && <span className="text-red-500 text-sm">{errors.keterangan?.message}</span>}
                     </div>
                 </div>
             <div className="sm:col-span-3 mt-3">
@@ -205,6 +78,7 @@ export default function TransferInput(props) {
                         {...register("nominal")}
                         className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                     />
+                    {errors.nominal && <span className="text-red-500 text-sm">{errors.nominal?.message}</span>}
                 </div>
             </div>
             <div className="sm:col-span-3 mt-3">
@@ -217,6 +91,7 @@ export default function TransferInput(props) {
                         {...register("tgl_transfer")}
                         className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                     />
+                    {errors.tgl_transfer && <span className="text-red-500 text-sm">{errors.tgl_transfer?.message}</span>}
                 </div>
             </div>
             <div className="flex mt-2">
