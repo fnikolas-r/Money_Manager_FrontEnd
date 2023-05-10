@@ -54,7 +54,7 @@ function Statistik(props) {
 
 
     const stats_2 = Data_Services.TRANSAKSI_STATS(data.filter(v=>(v.is_protected==false && v.id_transfer==null && v.id_utang_piutang==null && !v.rekening_hidden)),[],limit_date=="custom" ? tanggal_main : limit_date)
-    const data_harian = Data_Services.TRANSAKSI_DATE_FACTORY(data.sort((a, b) => {
+    const data_harian = Data_Services.TRANSAKSI_DATE_FACTORY(data.filter(v=>(v.is_protected==false && v.id_transfer==null && v.id_utang_piutang==null && !v.rekening_hidden)).sort((a, b) => {
         if (dayjs(a.trc_date).isBefore(dayjs(b.trc_date))) {
             return -1
         }

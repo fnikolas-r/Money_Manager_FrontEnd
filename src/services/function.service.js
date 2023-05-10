@@ -247,9 +247,8 @@ const TRANSAKSI_DATE_FACTORY = (data, recap_by = 'daily', limit = 30) => {
 
     const data_trc_pendapatan = TRANSAKSI_DATE(data, 1, recap_by, limit)
     const data_trc_pengeluaran = TRANSAKSI_DATE(data, -1, recap_by, limit)
-    const data_trc = TRANSAKSI_DATE(data, 'balance', recap_by, limit)
     return {
-        labels: data_trc.map(value => {
+        labels: data_trc_pendapatan.map(value => {
             return value.tanggal
         }),
         datasets: [
@@ -273,8 +272,8 @@ const TRANSAKSI_DATE_FACTORY = (data, recap_by = 'daily', limit = 30) => {
             },
             {
                 label: `Balance Transaksi Rp`,
-                data: data_trc.map(value => {
-                    return value.sum
+                data: data_trc_pendapatan.map((pendapatan,index) => {
+                    return pendapatan.sum - data_trc_pengeluaran[index].sum
                 }),
                 backgroundColor: 'rgb(99,167,255)',
                 borderColor: 'rgb(99,167,255)',
