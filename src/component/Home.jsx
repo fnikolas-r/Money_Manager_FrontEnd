@@ -43,14 +43,6 @@ function Home(props) {
                     </div>
                     <FloatButton/>
                 </div>
-        {/*    TODO: Last Before add
-
-
-
-            Minor patch
-            1. Tambahkan simple graphic
-            1. Remember me button at login component
-        */}
         </>
     )
 }
