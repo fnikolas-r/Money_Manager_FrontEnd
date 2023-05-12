@@ -2,7 +2,7 @@ import React from "react";
 import Logo from '../assets/logo.png';
 import {useDispatch, useSelector} from "react-redux";
 import {useForm} from "react-hook-form";
-import {login, logout} from '../storage/slices/auth.js';
+import {login,login_by_google, logout} from '../storage/slices/auth.js';
 import {Navigate, NavLink} from "react-router-dom";
 import Bg from '../assets/bg.jpg';
 import {GoogleLogin, useGoogleLogin} from '@react-oauth/google';
@@ -17,18 +17,15 @@ function Login(props) {
     })
 
     const GoogleLoginSuccess = (user) => {
-        console.log(user.access_token)
-        axios
-            .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
-                headers: {
-                    Authorization: `Bearer ${user.access_token}`,
-                    Accept: 'application/json'
-                }
+        const t = user.access_token
+        dispatch(login_by_google({t}))
+            .unwrap()
+            .then(() => {
+                console.log("Login Berhasil")
             })
-            .then((res) => {
-                console.log(res)
-            })
-            .catch((err) => console.log(err));
+            .catch(() => {
+                console.log("Error")
+            });
     }
     const handleLogin = (formValue) => {
         const {username, password} = formValue;

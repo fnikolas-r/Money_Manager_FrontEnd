@@ -18,6 +18,17 @@ const API_URL = import.meta.env.VITE_API_URL
         ).then(r=>console.log(r.data))
     }
 
+    async function login_by_google(t){
+        return axios.post(API_URL+"login/social/google/",{t}).then(
+            response =>{
+                if (response.data.refresh){
+                     localStorage.setItem("user-token",JSON.stringify(response.data))
+                    return response.data
+                }
+            }
+        ).then(r=>console.log(r.data)).catch(e=>console.log(e))
+    }
+
     function logout(){
         localStorage.removeItem("user-token")
         localStorage.removeItem("user-profile")
@@ -60,6 +71,7 @@ function refresh_token (){
 const AuthService = {
     sign_up,
     login,
+    login_by_google,
     logout,
     request_profile,
     refresh_token,
