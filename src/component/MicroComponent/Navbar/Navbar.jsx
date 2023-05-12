@@ -19,6 +19,7 @@ function classNames(...classes) {
 const MENUITEM = [
     {key: 1, link: "/", name: "Home"},
     {key: 2, link: "/summary/", name: "Statistik"},
+    {key:3,link:"/profile",name:"Profile"}
 ]
 
 

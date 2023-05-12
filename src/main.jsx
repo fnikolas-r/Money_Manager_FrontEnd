@@ -15,11 +15,14 @@ library.add(far);
 
 import {DevSupport} from "@react-buddy/ide-toolbox";
 import {ComponentPreviews, useInitial} from "./dev";
+import {GoogleOAuthProvider} from "@react-oauth/google";
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
+        <GoogleOAuthProvider clientId={import.meta.env.VITE_G_AUTH}>
         <Provider store={store}>
                 <App/>
         </Provider>
+        </GoogleOAuthProvider>
     </React.StrictMode>,
 )

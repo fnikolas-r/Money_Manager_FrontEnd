@@ -5,9 +5,31 @@ import {useForm} from "react-hook-form";
 import {login, logout} from '../storage/slices/auth.js';
 import {Navigate, NavLink} from "react-router-dom";
 import Bg from '../assets/bg.jpg';
+import {GoogleLogin, useGoogleLogin} from '@react-oauth/google';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import axios from "axios";
 
 function Login(props) {
     const dispatch = useDispatch()
+    const HandleGoogleLogin = useGoogleLogin({
+        onSuccess: (response) => GoogleLoginSuccess(response),
+        onError: (error) => console.log('Login Failed:', error)
+    })
+
+    const GoogleLoginSuccess = (user) => {
+        console.log(user.access_token)
+        axios
+            .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
+                headers: {
+                    Authorization: `Bearer ${user.access_token}`,
+                    Accept: 'application/json'
+                }
+            })
+            .then((res) => {
+                console.log(res)
+            })
+            .catch((err) => console.log(err));
+    }
     const handleLogin = (formValue) => {
         const {username, password} = formValue;
 
@@ -21,14 +43,14 @@ function Login(props) {
             });
     };
 
-    if(props.logout){
+    if (props.logout) {
         dispatch(logout())
         return <Login/>
     }
     const {register, handleSubmit, watch, formState: {errors}} = useForm();
     const {isLoggedIn} = useSelector(state => state.auth);
-    if(isLoggedIn){
-        return <Navigate  to="/"/>
+    if (isLoggedIn) {
+        return <Navigate to="/"/>
     }
     return (
         <>
@@ -49,42 +71,31 @@ function Login(props) {
 
                         <div className="mt-8">
                             <div>
-                                {/*<div>*/}
-                                {/*    <p className="text-sm font-medium text-gray-700">Atau login dengan </p>*/}
+                                <div>
+                                    <p className="text-sm font-medium text-gray-700">Atau login dengan </p>
+                                    <div className="mt-1 grid grid-cols-2 gap-3">
 
-                                {/*    <div className="mt-1 grid grid-cols-2 gap-3">*/}
+                                        <div>
+                                            <button
+                                                className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                                                type={"button"}
+                                                onClick={() => HandleGoogleLogin()}
+                                            >
+                                                <FontAwesomeIcon icon="fa-brands fa-google"/>
+                                                <span className="sr-only">Sign in with Google</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
 
-                                {/*        <div>*/}
-                                {/*            <a*/}
-                                {/*                href="#"*/}
-                                {/*                className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"*/}
-                                {/*            >*/}
-                                {/*                <FontAwesomeIcon icon={faGoogle}/>*/}
-                                {/*                <span className="sr-only">Sign in with Google</span>*/}
-                                {/*            </a>*/}
-
-                                {/*        </div>*/}
-
-                                {/*        <div>*/}
-                                {/*            <a*/}
-                                {/*                href="#"*/}
-                                {/*                className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"*/}
-                                {/*            >*/}
-                                {/*                <span className="sr-only">Sign in with GitHub</span>*/}
-                                {/*                <FontAwesomeIcon icon={faGithub}/>*/}
-                                {/*            </a>*/}
-                                {/*        </div>*/}
-                                {/*    </div>*/}
-                                {/*</div>*/}
-
-                                {/*<div className="mt-6 relative">*/}
-                                {/*    <div className="absolute inset-0 flex items-center" aria-hidden="true">*/}
-                                {/*        <div className="w-full border-t border-gray-300"/>*/}
-                                {/*    </div>*/}
-                                {/*    <div className="relative flex justify-center text-sm">*/}
-                                {/*        <span className="px-2 bg-white text-gray-500">atau daftar dengan</span>*/}
-                                {/*    </div>*/}
-                                {/*</div>*/}
+                                <div className="mt-6 relative">
+                                    <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                                        <div className="w-full border-t border-gray-300"/>
+                                    </div>
+                                    <div className="relative flex justify-center text-sm">
+                                        <span className="px-2 bg-white text-gray-500">atau daftar dengan</span>
+                                    </div>
+                                </div>
                             </div>
 
                             <div className="mt-6">
@@ -136,7 +147,8 @@ function Login(props) {
                                         </div>
                                     </div>
                                     <div className="text-sm content-center text-center">
-                                        <NavLink to={"/auth/register"} className="font-medium text-gray-300 hover:text-gray-400">
+                                        <NavLink to={"/auth/register"}
+                                                 className="font-medium text-gray-300 hover:text-gray-400">
                                             Belum Buat Akun? Ayo Daftar
                                         </NavLink>
                                     </div>
