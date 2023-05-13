@@ -18,6 +18,8 @@ import {delete_utangpiutang} from "../../../storage/slices/utang_piutang.js";
 import SetDoneModals from "./forms_view/SetDoneModals";
 import ListMenu from "./modals_view/ListMenu.jsx";
 import SplitBillInput from "./forms_view/Input/SplitBillInput";
+import ProfileInput from "./forms_view/Input/ProfileInput";
+import UploadPhoto from "./forms_view/Input/UploadPhoto.jsx";
 
 function render_name(name) {
     switch (name) {
@@ -33,6 +35,13 @@ function render_name(name) {
 
             case "input_utang_piutang":
             return <FormInput><UtangPiutangInput/></FormInput>
+            break;
+
+        case "input_profile":
+            return <FormInput><ProfileInput/></FormInput>
+            break;
+        case "upload_profile_photo":
+            return <FormInput><UploadPhoto/></FormInput>
             break;
          case "add_rekening":
             return <FormInput><RekeningInput/></FormInput>

@@ -17,7 +17,6 @@ const API_URL = import.meta.env.VITE_API_URL
             }
         ).then(r=>console.log(r.data))
     }
-
     async function login_by_google(t){
         return axios.post(API_URL+"login/social/google/",{t}).then(
             response =>{
@@ -39,17 +38,6 @@ const API_URL = import.meta.env.VITE_API_URL
         })
     }
 
-    function request_profile(){
-        return axios.get(API_URL+"login/profile/",{headers:
-                { Authorization : `Bearer ${JSON.parse(localStorage.getItem("user-token")).access}`
-            }
-        }).then(response=>{
-            if(response.data.username){
-                localStorage.setItem("user-data",JSON.stringify(response.data))
-                return response.data
-            }
-        }).catch(e=>{return {}})
-    }
 
     function profile(){
         try {
@@ -73,7 +61,6 @@ const AuthService = {
     login,
     login_by_google,
     logout,
-    request_profile,
     refresh_token,
     profile
 }

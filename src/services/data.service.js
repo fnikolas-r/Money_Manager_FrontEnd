@@ -223,12 +223,46 @@ const Transfer = {
 
 }
 
+const User = {
+    URL:API_URL+"login/profile/",
+    update(first_name,last_name,email,bio){
+        return api.patch(this.URL,{first_name,last_name,email,bio}).then(
+            response => response.data
+        ).catch(error=>console.log(error))
+    },
+    request_profile(){
+        return api.get(this.URL).then(response=>{
+            if(response.data.username){
+                localStorage.setItem("user-data",JSON.stringify(response.data))
+                return response.data
+            }
+        }).catch(e=>{return {}})
+    },
+    upload_profile_photo(photo) {
+        return api.patch(this.URL, photo,
+            {"headers":{ "Content-Type": "multipart/form-data" }})
+            .then(response => response.data)
+            .catch(error=>console.log(error))
+    },
+    delete_profile_photo(){
+        return api.post(this.URL+"delete_photo/").then(response=>response.data)
+    },
+    link_gogle_account(t){
+        return api.post(this.URL+"link/",{t}).then(response=>response.data)
+    },
+    unlink_google(){
+        return api.delete(this.URL).then(response=>response.data).then(response=>response.data)
+    },
+
+}
+
 const DataServices = {
     Transaksi,
     Transfer,
     UtangPiutang,
     Kategori,
-    Rekening
+    Rekening,
+    User
 }
 
 export default DataServices;

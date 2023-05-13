@@ -41,7 +41,7 @@
     "react-toastify": "^9.1.1",
     "react-tooltip": "^5.11.2",
     "recharts": "^2.4.3",
-    "sweetalert2": "^11.7.3",
+    "sweetalert2": "^11.7.5",
     "sweetalert2-react-content": "^5.0.7",
     "uuidv4": "^6.2.13",
     "yup": "^1.0.0",

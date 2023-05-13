@@ -9,6 +9,7 @@ import logo from '../../../assets/logo.png'
 import NavbarMenu from "./NavbarMenu";
 import {set_hidden_status, setinputmodalstatus} from "../../../storage/slices/component.js";
 import {logout} from "../../../storage/slices/auth.js";
+import {NavLink} from "react-router-dom";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -123,7 +124,7 @@ export default function Navbar() {
                                                 <span className="sr-only">Open user menu</span>
                                                 <img
                                                     className="h-8 w-8 rounded-full"
-                                                    src={`https://api.dicebear.com/5.x/bottts-neutral/svg?seed=${name}`}
+                                                    src={`${user.photo ?? `https://api.dicebear.com/5.x/bottts-neutral/svg?seed=${user.user_id}moneymanager`}`}
                                                     alt=""
                                                 />
                                             </Menu.Button>
@@ -144,15 +145,14 @@ export default function Navbar() {
 
                                                 <Menu.Item>
                                                     {({active}) => (
-                                                        <a
-                                                            href="react_moneymgr/src/component/MicroComponent/Navbar/Navbar.jsx#"
+                                                        <NavLink to={"/profile/"}
                                                             className={classNames(
                                                                 active ? 'bg-gray-100' : '',
                                                                 'block px-4 py-2 text-sm text-gray-700'
                                                             )}
                                                         >
                                                             Your Profile
-                                                        </a>
+                                                        </NavLink>
                                                     )}
                                                 </Menu.Item>
                                                 <Menu.Item>

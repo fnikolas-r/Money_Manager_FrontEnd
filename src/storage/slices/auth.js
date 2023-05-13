@@ -8,6 +8,9 @@ import {get_utangpiutang} from "./utang_piutang.js";
 
 
 import AuthService from "../../services/auth.service.js";
+import DataService from "../../services/data.service.js";
+import {resetinputmodal} from "./component.js";
+import axios from "axios";
 
 
 export const register = createAsyncThunk(
@@ -52,7 +55,7 @@ export const login = createAsyncThunk(
     async ({username, password, remember_me}, thunkAPI) => {
         try {
             const user_token = await AuthService.login(username, password);
-            const user_data = await AuthService.request_profile();
+            const user_data = await DataService.User.request_profile();
             await thunkAPI.dispatch(setMessage({message: "Berhasil Login", status: 200}))
             return {user: user_data, token: user_token};
         } catch (e) {
@@ -69,7 +72,7 @@ export const login_by_google = createAsyncThunk(
     async ({t}, thunkAPI) => {
         try {
             const user_token = await AuthService.login_by_google(t);
-            const user_data = await AuthService.request_profile();
+            const user_data = await DataService.User.request_profile();
             await thunkAPI.dispatch(setMessage({message: "Berhasil Login", status: 200}))
             return {user: user_data, token: user_token}
 
@@ -84,7 +87,7 @@ export const get_profile = createAsyncThunk(
     "auth/profile",
     async ()=>{
         try {
-            const user_data = await AuthService.request_profile();
+            const user_data = await DataService.User.request_profile();
             return user_data;
         }catch (e) {
             const message = e.response.data.message || e.toString();
@@ -93,6 +96,83 @@ export const get_profile = createAsyncThunk(
         }
     }
 
+)
+
+export const update_profile = createAsyncThunk(
+    "auth/profile/update",
+    async ({first_name,last_name,bio,email},thunkAPI)=>{
+        try {
+            const user_data = await DataService.User.update(first_name,last_name,email,bio);
+            await thunkAPI.dispatch(resetinputmodal())
+            await thunkAPI.dispatch(get_profile())
+            return user_data
+        }catch (e) {
+            const message = e.response.data.message || e.toString();
+            thunkAPI.dispatch(setMessage({status: 400, message: message}));
+            return thunkAPI.rejectWithValue("Terjadi Kesalahan");
+        }
+    }
+)
+
+export const update_profile_photo = createAsyncThunk(
+    "auth/profile/photo/update",
+    async ({file},thunkAPI)=>{
+        try {
+            const formData = new FormData();
+            formData.append("photo",file)
+            const user_data = await DataService.User.upload_profile_photo(formData)
+            await thunkAPI.dispatch(resetinputmodal())
+            await thunkAPI.dispatch(get_profile())
+            return user_data
+        }catch (e) {
+
+        }
+    }
+)
+
+export const delete_profile_photo = createAsyncThunk(
+    "auth/profile/photo/delete",
+    async (_,thunkAPI)=>{
+        try {
+            const result = DataService.User.delete_profile_photo()
+            thunkAPI.dispatch(get_profile())
+            return result
+        }catch (e) {
+            const message = e.response.data.message || e.toString();
+            thunkAPI.dispatch(setMessage({status: 400, message: message}));
+            return thunkAPI.rejectWithValue("Terjadi Kesalahan");
+        }
+    }
+)
+export const link_google = createAsyncThunk(
+    "auth/profile/google/link",
+    async ({t},thunkAPI)=>{
+        try {
+            const user = await DataService.User.link_gogle_account(t)
+            await thunkAPI.dispatch(setMessage({message: "Berhasil Meyambungkan Google", status: 200}))
+            await thunkAPI.dispatch(get_profile())
+            return user
+        }catch (e) {
+            const message = e.response.data.message || e.toString();
+            thunkAPI.dispatch(setMessage({status: 400, message: message}));
+            return thunkAPI.rejectWithValue("Terjadi Kesalahan");
+        }
+    }
+)
+export const unlink_google = createAsyncThunk(
+    "auth/profile/google/unlink",
+    async (_,thunkAPI)=>{
+        try {
+            const data = await DataService.User.unlink_google();
+            await thunkAPI.dispatch(get_profile())
+            await thunkAPI.dispatch(setMessage({message: "Berhasil Menghapus Link Google", status: 400}))
+            return data
+        }catch (e) {
+            const message = e.response.data.message || e.toString();
+            thunkAPI.dispatch(setMessage({status: 400, message: message}));
+            return thunkAPI.rejectWithValue("Terjadi Kesalahan");
+        }
+    }
 )
 export const logout = createAsyncThunk(
     "auth/logout",
@@ -154,6 +234,9 @@ const authSlice = createSlice({
             state.token = null;
             state.isLoading = true;
         },
+        [get_profile.fulfilled]:(state,action)=>{
+            state.user = action.payload;
+        }
     },
 })
 

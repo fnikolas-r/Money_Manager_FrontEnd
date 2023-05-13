@@ -1,12 +1,28 @@
 import Navbar from "./MicroComponent/Navbar/Navbar";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {Tooltip} from "react-tooltip";
+import {Tooltip} from "react-tooltip"
+import {delete_profile_photo, link_google, login_by_google, unlink_google} from "../storage/slices/auth.js";
+import {setinputmodalstatus} from "../storage/slices/component.js";
+import Swal from 'sweetalert2'
+import withReactContent from "sweetalert2-react-content";
+import {useGoogleLogin} from '@react-oauth/google';
 
 function Profile(props) {
     const {user} = useSelector(state => state.auth);
+    const MySwal = withReactContent(Swal);
     const name = `${user.first_name} ${user.last_name}`
 
+    const HandleGoogleLink = useGoogleLogin({
+        onSuccess: (response) => GoogleLoginSuccess(response),
+        onError: (error) => console.log('Login Failed:', error)
+    })
+
+    const GoogleLoginSuccess = (user) => {
+        const t = user.access_token
+        dispatch(link_google({t}))
+    }
+    const dispatch = useDispatch()
     return <>
         <Navbar/>
         <div className="max-w-4xl flex items-center h-auto lg:h-screen flex-wrap mx-auto my-32 lg:my-0 -z-100">
@@ -17,9 +33,33 @@ function Profile(props) {
                 <div className="p-4 md:p-12 text-center lg:text-left">
 
                     <div
-                        className="block lg:hidden rounded-full shadow-xl mx-auto -mt-16 h-48 w-48 bg-cover bg-center"></div>
+                        className="block lg:hidden rounded-full shadow-xl mx-auto -mt-16 h-48 w-48 bg-cover bg-center flex justify-center items-center group"
+                        style={{
+                            backgroundImage: `url('${user.photo ??
+                            `https://api.dicebear.com/5.x/bottts-neutral/svg?seed=${user.user_id}moneymanager`}')`
+                        }}>
+                        <div className="content-center flex-col">
+                            {user.photo ? <button
+                                className=" hidden group-hover:block  border border-2 bg-red-500 text-white rounded-md p-0.5 text-sm">
+                                <b>Remove Photo</b></button> : <></>}
+                            <button
+                                className=" hidden group-hover:block absolute border border-2 bg-white rounded-md p-0.5 mt-2 text-sm"
+                                onClick={() => {
+                                    dispatch(setinputmodalstatus({"name": "upload_profile_photo"}))
+                                }}
+                            >
+                                <b>Update Photo</b></button>
+                        </div>
+                    </div>
 
-                    <h1 className="text-3xl font-bold pt-8 lg:pt-0">{name}</h1>
+                    <div className="flex">
+                        <div className="grow"><h1 className="text-3xl font-bold pt-8 lg:pt-0">{name}</h1></div>
+                        <div className="grow-0">
+                            <button onClick={() => {
+                                dispatch(setinputmodalstatus({"name": "input_profile"}))
+                            }}><i>Ubah Profil</i></button>
+                        </div>
+                    </div>
                     <div className="mx-auto lg:mx-0 w-4/5 pt-3 border-b-2 border-green-500 opacity-25 mb-4"></div>
                     <div className="flex">
                         <div className="lg:w-3/4 w-full">
@@ -46,13 +86,28 @@ function Profile(props) {
 
 
                         </div>
-                        <div className="lg:w-1/4 hidden lg:block relative group">
-                            <div className="h-48 w-48 rounded-full shadow-xl mx-auto bg-cover bg-center" style={{
-                                backgroundImage: `url('${user.photo ?? `https://api.dicebear.com/5.x/bottts-neutral/svg?seed=${name}`}')`
-                            }}>
-                                {user.photo ? <button
-                                    className=" hidden group-hover:block absolute bottom-20 left-8 border border-2 bg-white rounded-md p-1">
-                                    <b>Remove Photo</b></button> : <></>}
+                        <div className="lg:w-1/4 hidden lg:block  group">
+                            <div
+                                className="h-48 w-48 rounded-full shadow-xl mx-auto bg-cover bg-center flex items-center justify-center"
+                                style={{
+                                    backgroundImage: `url('${user.photo ?? `https://api.dicebear.com/5.x/bottts-neutral/svg?seed=${user.user_id}moneymanager`}')`
+                                }}>
+                                <div className="content-center flex-col">
+                                    {user.photo ? <button
+                                        className=" hidden group-hover:block  border border-2 bg-red-500 text-white rounded-md p-0.5 text-sm"
+                                        onClick={() => {
+                                            dispatch(delete_profile_photo())
+                                        }}
+                                    >
+                                        <b>Remove Photo</b></button> : <></>}
+                                    <button
+                                        className=" hidden group-hover:block border border-2 bg-white rounded-md p-0.5 mt-2 text-sm"
+                                        onClick={() => {
+                                            dispatch(setinputmodalstatus({"name": "upload_profile_photo"}))
+                                        }}
+                                    >
+                                        <b>Update Photo</b></button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -63,11 +118,27 @@ function Profile(props) {
                                 data-tooltip-id="my-tooltip"
                                 data-tooltip-content={`Terhubung Dengan Email ${JSON.parse(user.google_data).email}`}
                                 data-tooltip-place="top"
+                                onClick={() => {
+                                    MySwal.fire({
+                                        title: 'Hapus Tautan',
+                                        text:"Apakah Anda Ingin Menghapus Tautan Google dengan Email : "+JSON.parse(user.google_data).email,
+                                        showDenyButton: true,
+                                        denyButtonText:"Batalkan",
+                                        confirmButtonText: 'Hapus',
+                                    }).then((result) => {
+                                        /* Read more about isConfirmed, isDenied below */
+                                        if (result.isConfirmed) {
+                                            dispatch(unlink_google())
+                                        }
+                                    })
+                                }}
                             >
                                 Terhubung Dengan Google
                             </button> :
                             <button
-                                className="bg-indigo-700 hover:bg-indigo-900 text-white font-bold py-2 px-4 rounded-full">
+                                className="bg-indigo-700 hover:bg-indigo-900 text-white font-bold py-2 px-4 rounded-full"
+                                onClick={()=>{HandleGoogleLink()}}
+                            >
                                 <FontAwesomeIcon icon={"fa-brands fa-google"}/> Hubungkan Dengan Google
                             </button>
                         }
