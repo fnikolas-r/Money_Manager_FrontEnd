@@ -39,6 +39,7 @@ export const bootstrap = createAsyncThunk(
             await thunkAPI.dispatch(get_utangpiutang())
             await thunkAPI.dispatch(get_summary_rekening())
             await thunkAPI.dispatch(get_transfer())
+            await thunkAPI.dispatch(get_profile())
             return true;
         } catch (e) {
             thunkAPI.dispatch(setMessage({status: 400, message: "Terjadi Kesalahan "}));
@@ -79,7 +80,20 @@ export const login_by_google = createAsyncThunk(
         }
     }
 )
+export const get_profile = createAsyncThunk(
+    "auth/profile",
+    async ()=>{
+        try {
+            const user_data = await AuthService.request_profile();
+            return user_data;
+        }catch (e) {
+            const message = e.response.data.message || e.toString();
+            thunkAPI.dispatch(setMessage({status: 400, message: message}));
+            return thunkAPI.rejectWithValue("Terjadi Kesalahan");
+        }
+    }
 
+)
 export const logout = createAsyncThunk(
     "auth/logout",
     async () => {
@@ -103,6 +117,9 @@ const authSlice = createSlice({
         },
         [bootstrap.fulfilled]: (state) => {
             state.isLoading = false;
+        },
+        [get_profile.fulfilled]:(state,action)=>{
+            state.user = action.payload
         },
         [login.fulfilled]: (state, action) => {
             state.isLoggedIn = true;

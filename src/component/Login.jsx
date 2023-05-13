@@ -5,9 +5,8 @@ import {useForm} from "react-hook-form";
 import {login,login_by_google, logout} from '../storage/slices/auth.js';
 import {Navigate, NavLink} from "react-router-dom";
 import Bg from '../assets/bg.jpg';
-import {GoogleLogin, useGoogleLogin} from '@react-oauth/google';
+import {useGoogleLogin} from '@react-oauth/google';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import axios from "axios";
 
 function Login(props) {
     const dispatch = useDispatch()

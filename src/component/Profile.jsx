@@ -1,7 +1,7 @@
 import Navbar from "./MicroComponent/Navbar/Navbar";
 import {useSelector} from "react-redux";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-
+import {Tooltip} from "react-tooltip";
 
 function Profile(props) {
     const {user} = useSelector(state => state.auth);
@@ -9,11 +9,11 @@ function Profile(props) {
 
     return <>
         <Navbar/>
-        <div className="max-w-4xl flex items-center h-auto lg:h-screen flex-wrap mx-auto my-32 lg:my-0">
+        <div className="max-w-4xl flex items-center h-auto lg:h-screen flex-wrap mx-auto my-32 lg:my-0 -z-100">
 
 
             <div id="profile"
-                 className="w-full lg:w-full rounded-lg lg:rounded-l-lg lg:rounded-r-none shadow-2xl bg-white opacity-75 mx-6 lg:mx-0">
+                 className="w-full lg:w-full rounded-lg lg:rounded-l-lg lg:rounded-r-none shadow-2xl bg-white opacity-75 mx-6 lg:mx-0 -z-100">
                 <div className="p-4 md:p-12 text-center lg:text-left">
 
                     <div
@@ -42,24 +42,36 @@ function Profile(props) {
                                 </svg>
                                 My Email {user.email}
                             </p>
-                            <p className="pt-8 text-sm">Totally optional short description about yourself, what you do
-                                and
-                                so
-                                on.</p>
+                            <p className="pt-8 text-sm">{user.bio ?? "Tulislah Sesuatu Tentang Dirimu"}</p>
 
 
                         </div>
-                        <div className="lg:w-1/4 hidden lg:block ">
+                        <div className="lg:w-1/4 hidden lg:block relative group">
                             <div className="h-48 w-48 rounded-full shadow-xl mx-auto bg-cover bg-center" style={{
-                                backgroundImage:`url('https://api.dicebear.com/5.x/bottts-neutral/svg?seed=${name}')`
-                            }}></div>
+                                backgroundImage: `url('${user.photo ?? `https://api.dicebear.com/5.x/bottts-neutral/svg?seed=${name}`}')`
+                            }}>
+                                {user.photo ? <button
+                                    className=" hidden group-hover:block absolute bottom-20 left-8 border border-2 bg-white rounded-md p-1">
+                                    <b>Remove Photo</b></button> : <></>}
+                            </div>
                         </div>
                     </div>
                     <div className="pt-12 pb-8">
-                        <button
-                            className="bg-indigo-700 hover:bg-indigo-900 text-white font-bold py-2 px-4 rounded-full">
-                            <FontAwesomeIcon icon={"fa-brands fa-google"}/> Hubungkan Dengan Google
-                        </button>
+                        {user.google_data ?
+                            <button
+                                className="text-center bg-indigo-700 hover:bg-indigo-900 text-white font-bold py-2 px-4 rounded-full"
+                                data-tooltip-id="my-tooltip"
+                                data-tooltip-content={`Terhubung Dengan Email ${JSON.parse(user.google_data).email}`}
+                                data-tooltip-place="top"
+                            >
+                                Terhubung Dengan Google
+                            </button> :
+                            <button
+                                className="bg-indigo-700 hover:bg-indigo-900 text-white font-bold py-2 px-4 rounded-full">
+                                <FontAwesomeIcon icon={"fa-brands fa-google"}/> Hubungkan Dengan Google
+                            </button>
+                        }
+                        <Tooltip id="my-tooltip"/>
                     </div>
                 </div>
 
