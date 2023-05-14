@@ -5,7 +5,6 @@ import {useDispatch,useSelector} from "react-redux";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faBell, faListAlt, faPlusSquare, faWindowClose} from '@fortawesome/free-regular-svg-icons'
 import Logo from '../../../assets/logo.png'
-import logo from '../../../assets/logo.png'
 import NavbarMenu from "./NavbarMenu";
 import {set_hidden_status, setinputmodalstatus} from "../../../storage/slices/component.js";
 import {logout} from "../../../storage/slices/auth.js";

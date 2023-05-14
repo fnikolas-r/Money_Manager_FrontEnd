@@ -26,7 +26,7 @@ export default function TransferInput(props) {
     })
 
 
-    const {register, setValue, handleSubmit, formState: {errors}} = useForm({
+    const {register, setValue, handleSubmit, getValues,formState: {errors}} = useForm({
         resolver: yupResolver(schema),
     })
 
