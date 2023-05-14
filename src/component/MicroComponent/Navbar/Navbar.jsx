@@ -32,6 +32,7 @@ export default function Navbar() {
     const {user} = useSelector(state => state.auth);
     const {show_hidden_account} = useSelector(state => state.component);
     const name =`${user.first_name} ${user.last_name}`
+    const photo = user.photo ? String(import.meta.env.VITE_API_URL).replace("/api/",user.photo) : null
     const select_show_hidden = ()=> {
     return <div className="border-indigo-500  text-gray-900 inline-flex items-center px-1 pt-1 text-sm font-medium">
                                         <select className="relative inline-flex items-center border border-transparent
@@ -124,7 +125,7 @@ export default function Navbar() {
                                                 <span className="sr-only">Open user menu</span>
                                                 <img
                                                     className="h-8 w-8 rounded-full"
-                                                    src={`${user.photo ?? `https://api.dicebear.com/5.x/bottts-neutral/svg?seed=${user.user_id}moneymanager`}`}
+                                                    src={`${photo ?? `https://api.dicebear.com/5.x/bottts-neutral/svg?seed=${user.user_id}moneymanager`}`}
                                                     alt=""
                                                 />
                                             </Menu.Button>
@@ -216,7 +217,7 @@ export default function Navbar() {
                                 <div className="flex-shrink-0">
                                     <img
                                         className="h-10 w-10 rounded-full"
-                                        src={`https://api.dicebear.com/5.x/bottts-neutral/svg?seed=${name}`}
+                                        src={`${photo ?? `https://api.dicebear.com/5.x/bottts-neutral/svg?seed=${user.user_id}moneymanager`}`}
                                         alt=""
                                     />
                                 </div>

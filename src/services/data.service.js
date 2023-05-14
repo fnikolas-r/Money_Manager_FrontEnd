@@ -228,7 +228,7 @@ const User = {
     update(first_name,last_name,email,bio){
         return api.patch(this.URL,{first_name,last_name,email,bio}).then(
             response => response.data
-        ).catch(error=>console.log(error))
+        )
     },
     request_profile(){
         return api.get(this.URL).then(response=>{
@@ -236,13 +236,12 @@ const User = {
                 localStorage.setItem("user-data",JSON.stringify(response.data))
                 return response.data
             }
-        }).catch(e=>{return {}})
+        })
     },
     upload_profile_photo(photo) {
         return api.patch(this.URL, photo,
             {"headers":{ "Content-Type": "multipart/form-data" }})
             .then(response => response.data)
-            .catch(error=>console.log(error))
     },
     delete_profile_photo(){
         return api.post(this.URL+"delete_photo/").then(response=>response.data)

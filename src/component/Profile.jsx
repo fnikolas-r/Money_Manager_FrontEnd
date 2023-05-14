@@ -17,7 +17,7 @@ function Profile(props) {
         onSuccess: (response) => GoogleLoginSuccess(response),
         onError: (error) => console.log('Login Failed:', error)
     })
-
+    const photo = user.photo ? String(import.meta.env.VITE_API_URL).replace("/api/",user.photo) : null
     const GoogleLoginSuccess = (user) => {
         const t = user.access_token
         dispatch(link_google({t}))
@@ -35,11 +35,11 @@ function Profile(props) {
                     <div
                         className="block lg:hidden rounded-full shadow-xl mx-auto -mt-16 h-48 w-48 bg-cover bg-center flex justify-center items-center group"
                         style={{
-                            backgroundImage: `url('${user.photo ??
+                            backgroundImage: `url('${photo ??
                             `https://api.dicebear.com/5.x/bottts-neutral/svg?seed=${user.user_id}moneymanager`}')`
                         }}>
                         <div className="content-center flex-col">
-                            {user.photo ? <button
+                            {photo ? <button
                                 className=" hidden group-hover:block  border border-2 bg-red-500 text-white rounded-md p-0.5 text-sm">
                                 <b>Remove Photo</b></button> : <></>}
                             <button
@@ -52,9 +52,9 @@ function Profile(props) {
                         </div>
                     </div>
 
-                    <div className="flex">
-                        <div className="grow"><h1 className="text-3xl font-bold pt-8 lg:pt-0">{name}</h1></div>
-                        <div className="grow-0">
+                    <div className="flex flex-wrap">
+                        <div className="lg:grow w-full lg:w-10/12"><h1 className="text-3xl font-bold pt-8 lg:pt-0">{name}</h1></div>
+                        <div className="lg:grow-0 lg:w-2/12 w-full place-self-end">
                             <button onClick={() => {
                                 dispatch(setinputmodalstatus({"name": "input_profile"}))
                             }}><i>Ubah Profil</i></button>
@@ -90,10 +90,10 @@ function Profile(props) {
                             <div
                                 className="h-48 w-48 rounded-full shadow-xl mx-auto bg-cover bg-center flex items-center justify-center"
                                 style={{
-                                    backgroundImage: `url('${user.photo ?? `https://api.dicebear.com/5.x/bottts-neutral/svg?seed=${user.user_id}moneymanager`}')`
+                                    backgroundImage: `url('${photo ?? `https://api.dicebear.com/5.x/bottts-neutral/svg?seed=${user.user_id}moneymanager`}')`
                                 }}>
                                 <div className="content-center flex-col">
-                                    {user.photo ? <button
+                                    {photo ? <button
                                         className=" hidden group-hover:block  border border-2 bg-red-500 text-white rounded-md p-0.5 text-sm"
                                         onClick={() => {
                                             dispatch(delete_profile_photo())

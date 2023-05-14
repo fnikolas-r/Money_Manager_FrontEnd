@@ -25,7 +25,7 @@ const API_URL = import.meta.env.VITE_API_URL
                     return response.data
                 }
             }
-        ).then(r=>console.log(r.data)).catch(e=>console.log(e))
+        ).then(r=>console.log(r.data))
     }
 
     function logout(){

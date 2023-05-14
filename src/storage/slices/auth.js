@@ -72,6 +72,7 @@ export const login_by_google = createAsyncThunk(
     async ({t}, thunkAPI) => {
         try {
             const user_token = await AuthService.login_by_google(t);
+            console.log(user_token)
             const user_data = await DataService.User.request_profile();
             await thunkAPI.dispatch(setMessage({message: "Berhasil Login", status: 200}))
             return {user: user_data, token: user_token}
@@ -125,7 +126,9 @@ export const update_profile_photo = createAsyncThunk(
             await thunkAPI.dispatch(get_profile())
             return user_data
         }catch (e) {
-
+            const message = e.response.data.message || e.toString();
+            thunkAPI.dispatch(setMessage({status: 400, message: message}));
+            return thunkAPI.rejectWithValue("Terjadi Kesalahan");
         }
     }
 )
