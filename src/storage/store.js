@@ -19,5 +19,6 @@ export default configureStore({
         transfer:transferReducer,
         kategori:kategoriReducer,
         utangpiutang:utangpiutangReducer,
-    }
+    },
+    devTools : import.meta.env.MODE!=="production"
 })
