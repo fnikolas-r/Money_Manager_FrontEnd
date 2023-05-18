@@ -81,6 +81,9 @@ const Rekening = {
     },
     summary() {
         return api.get(this.URL + "stats_summary/").then(response => response.data)
+    },
+    setPinned(pk){
+        return api.post(this.URL+pk+"/set_pinned/").then(response=>response.data)
     }
 
 }

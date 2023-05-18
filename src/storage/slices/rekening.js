@@ -107,11 +107,27 @@ export const get_summary_rekening = createAsyncThunk("rekening/summary",async (_
     }
 })
 
+export const set_rekening_pinned = createAsyncThunk("rekening/set_pinned",async ({pk},thunkAPI)=>{
+    try {
+        const response = await DataServices.Rekening.setPinned(pk);
+        thunkAPI.dispatch(get_summary_rekening())
+        return response;
+    }catch (e) {
+        const message = e.response.data.detail || e.toString();
+        thunkAPI.dispatch(setMessage({status: 400, message: message}));
+        return thunkAPI.rejectWithValue("Terjadi Kesalahan");
+    }
+})
+
 const firststate = {name:"",is_hidden:"",initial_deposit:""}
 const initialState = {
     detail:firststate,
     data:[],
-    summary:[]
+    summary:[],
+    isLoading:{
+        rekening:false,
+        summary:false,
+    }
 }
 
 const rekening = createSlice({
@@ -129,15 +145,26 @@ const rekening = createSlice({
         [get_rekening.fulfilled] : (state,actions) =>{
             state.data = actions.payload
             state.detail = firststate
+            state.isLoading.rekening = false
         },
         [get_summary_rekening.fulfilled]:(state,actions)=>{
             state.summary = actions.payload
+            state.isLoading.summary = false
+        },
+        [get_summary_rekening.pending]:(state)=>{
+            state.isLoading.summary = true
         },
         [get_detail_rekening.fulfilled] : (state,actions)=>{
             state.detail = actions.payload
         },
         [get_detail_rekening.rejected] : (state,actions)=>{
             state.detail = firststate
+        },
+        [get_rekening.pending]:(state)=>{
+            state.isLoading.rekening = true
+        },
+        [set_rekening_pinned.pending]:(state,actions)=>{
+            state.isLoading.summary = actions.meta.arg.pk
         },
         [resetinputmodal] : (state)=>{
             state.detail = firststate

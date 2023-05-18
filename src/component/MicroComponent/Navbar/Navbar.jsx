@@ -140,8 +140,7 @@ export default function Navbar() {
                                         >
                                             <Menu.Items className="origin-top-right absolute
                       right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black
-                      z-100
-                       ring-opacity-5 focus:outline-none">
+                       ring-opacity-5 focus:outline-none z-[100]">
 
                                                 <Menu.Item>
                                                     {({active}) => (
