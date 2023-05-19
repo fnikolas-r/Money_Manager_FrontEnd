@@ -11,9 +11,9 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 
 
-export const add_rekening = createAsyncThunk("rekening/add", async ({name, is_hidden, initial_deposit,icon}, thunkAPI) => {
+export const add_rekening = createAsyncThunk("rekening/add", async ({name, is_hidden, initial_deposit,icon,trf_minimum}, thunkAPI) => {
         try {
-            const data = await DataServices.Rekening.add(name, is_hidden, initial_deposit,icon);
+            const data = await DataServices.Rekening.add(name, is_hidden, initial_deposit,icon,trf_minimum);
             thunkAPI.dispatch(get_summary_rekening())
             thunkAPI.dispatch(get_transaksi())
             thunkAPI.dispatch(modalbackto())
@@ -28,10 +28,10 @@ export const add_rekening = createAsyncThunk("rekening/add", async ({name, is_hi
         }
     })
 
-export const edit_rekeneing = createAsyncThunk("rekening/edit", async ({id,icon, name, is_hidden, initial_deposit}, thunkAPI) => {
+export const edit_rekeneing = createAsyncThunk("rekening/edit", async ({id,icon, name, is_hidden, initial_deposit,trf_minimum}, thunkAPI) => {
 
         try {
-            const data = await DataServices.Rekening.put(id, name, is_hidden, initial_deposit,icon);
+            const data = await DataServices.Rekening.put(id, name, is_hidden, initial_deposit,icon,trf_minimum);
             thunkAPI.dispatch(get_summary_rekening())
             thunkAPI.dispatch(get_rekening())
             thunkAPI.dispatch(get_transfer())
@@ -119,7 +119,7 @@ export const set_rekening_pinned = createAsyncThunk("rekening/set_pinned",async 
     }
 })
 
-const firststate = {name:"",is_hidden:"",initial_deposit:""}
+const firststate = {name:"",is_hidden:"",initial_deposit:"",trf_minimum:0}
 const initialState = {
     detail:firststate,
     data:[],

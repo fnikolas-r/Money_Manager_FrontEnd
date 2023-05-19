@@ -10,6 +10,8 @@ import ModalMaster from "./MicroComponent/Modals/ModalMaster";
 import TabelTransasksi from "./MicroComponent/Tables/TabelTransasksi";
 import TabelTransfer from "./MicroComponent/Tables/TabelTransfer.jsx";
 import TabelUtangPiutang from "./MicroComponent/Tables/TabelUtangPiutang.jsx";
+import TransactionMeter from "./Statistics/TransactionMeter";
+import TransactionMeterSection from "./Statistics/TransactionMeterSection";
 
 
 dayjs.locale('id')
@@ -34,6 +36,9 @@ function Home(props) {
                     <Dividers name="Daftar Transaksi"/>
                     <div className="mb-10">
                         <TabelTransasksi/>
+                    </div>
+                    <div className="mb-10">
+                        <TransactionMeterSection/>
                     </div>
                     <div className="mb-10">
                         <TabelTransfer/>

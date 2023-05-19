@@ -32,7 +32,8 @@ export default function RekeningInput(props) {
     const schema = yup.object().shape({
         name: yup.string().required().max(50),
         initial_deposit: yup.number().positive().integer().required(),
-        is_hidden: yup.boolean().default(false)
+        is_hidden: yup.boolean().default(false),
+        trf_minimum:yup.number().min(0).default(0)
     });
 
     const {register, setValue, handleSubmit, watch, formState: {errors}} = useForm({
@@ -46,6 +47,7 @@ export default function RekeningInput(props) {
             }
             setValue("name", detail.name)
             setValue("initial_deposit", detail.initial_deposit)
+            setValue("trf_minimum", detail.trf_minimum)
             setValue("is_hidden", detail.is_hidden)
             setValue("icon", detail.icon)
         }
@@ -56,12 +58,12 @@ export default function RekeningInput(props) {
         setValue("icon",selectedIcon)
     }, [selectedIcon]);
     const handle_rekening = (data) => {
-        const {name, is_hidden, initial_deposit,icon} = data;
+        const {name, is_hidden, initial_deposit,icon,trf_minimum} = data;
 
         if (id) {
-            dispatch(edit_rekeneing({id, name, is_hidden, initial_deposit,icon}))
+            dispatch(edit_rekeneing({id, name, is_hidden, initial_deposit,icon,trf_minimum}))
         } else {
-            dispatch(add_rekening({name, is_hidden, initial_deposit,icon}))
+            dispatch(add_rekening({name, is_hidden, initial_deposit,icon,trf_minimum}))
         }
     }
 
@@ -95,7 +97,19 @@ export default function RekeningInput(props) {
                     {errors.initial_deposit && <span className="text-red-500 text-sm">{errors.initial_deposit?.message}</span>}
                 </div>
             </div>
-
+            <div className="sm:col-span-3 mt-3">
+                <label htmlFor="last-name" className="block text-sm font-medium text-gray-700">
+                    Transfer Minimum
+                </label>
+                <div className="mt-1">
+                    <input
+                        type="number"
+                        {...register("trf_minimum")}
+                        className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                    />
+                    {errors.trf_minimum && <span className="text-red-500 text-sm">{errors.trf_minimum?.message}</span>}
+                </div>
+            </div>
             <div className="sm:col-span-3 mt-3">
                 <label htmlFor="country" className="block text-sm font-medium text-gray-700">
                     Jenis

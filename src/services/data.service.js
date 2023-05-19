@@ -69,12 +69,12 @@ const Rekening = {
         }
         return api.get(URL).then(response => response.data)
     },
-    add(name, is_hidden, initial_deposit,icon) {
-        return api.post(this.URL, {name, is_hidden, initial_deposit,icon}
+    add(name, is_hidden, initial_deposit,icon,trf_minimum) {
+        return api.post(this.URL, {name, is_hidden, initial_deposit,icon,trf_minimum}
         ).then(response => response.data)
     },
-    put(id, name, is_hidden, initial_deposit,icon) {
-        return api.patch(this.URL + id + "/", {name, is_hidden, initial_deposit,icon}).then(response => response.data)
+    put(id, name, is_hidden, initial_deposit,icon,trf_minimum) {
+        return api.patch(this.URL + id + "/", {name, is_hidden, initial_deposit,icon,trf_minimum}).then(response => response.data)
     },
     delete(id) {
         return api.delete(this.URL + id + "/").then(response => response.data)
