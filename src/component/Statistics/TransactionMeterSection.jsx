@@ -10,7 +10,7 @@ export default function TransactionMeterSection() {
 
     const expense_today = Math.round(transaksi_list.filter(
         v => (v.is_protected == false && v.id_transfer == null && v.id_utang_piutang == null &&
-            v.trc_type == -1 && dayjs(v.trc_date).isSame(dayjs(), 'month'))
+            v.trc_type == -1 && dayjs(v.trc_date).isSame(dayjs(), 'day'))
     ).reduce((acc, current) => acc + current.price, 0))
 
     const {summary} = rekening;
