@@ -43,8 +43,8 @@ export default function TransactionMeter(props) {
             const max = options.limit
 
 
-            textLabel('0', left, yCoor + 20, 0.7, 'top', 'left');
-            textLabel(UtilServices.to_rupiah(max), right, yCoor + 20, 0.7, 'top', 'right');
+            textLabel('0', left, yCoor + 20, 1, 'top', 'left');
+            textLabel(UtilServices.to_rupiah(max), right, yCoor + 20, 1, 'top', 'right');
             textLabel(UtilServices.to_rupiah(score), xCoor, yCoor, 1.2, 'bottom', 'center');
             textLabel(options.title, xCoor, yCoor-70, 0.6, 'bottom', 'center');
 
