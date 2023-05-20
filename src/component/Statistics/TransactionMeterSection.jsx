@@ -34,7 +34,7 @@ export default function TransactionMeterSection() {
         <div className="px-2 py-3 border border-0.5 mx-7 rounded">
             <div className="text-center text-gray-800 select-none"><i>Budgeting</i></div>
             <div className="flex">
-                <div className="w-1 md:w-1/3">
+                <div className="w-full md:w-1/3">
                     <TransactionMeter max={limit_trc} current={expense_today==0?0.001:expense_today} title="Limit Pengeluaran Harian"/>
                 </div>
             </div>
