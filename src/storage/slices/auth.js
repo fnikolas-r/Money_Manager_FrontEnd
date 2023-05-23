@@ -72,7 +72,6 @@ export const login_by_google = createAsyncThunk(
     async ({t}, thunkAPI) => {
         try {
             const user_token = await AuthService.login_by_google(t);
-            console.log(user_token)
             const user_data = await DataService.User.request_profile();
             return {user: user_data, token: user_token}
 
