@@ -11,6 +11,7 @@ import AuthService from "../../services/auth.service.js";
 import DataService from "../../services/data.service.js";
 import {resetinputmodal} from "./component.js";
 import axios from "axios";
+import {toast} from "react-toastify";
 
 
 export const register = createAsyncThunk(
@@ -56,7 +57,6 @@ export const login = createAsyncThunk(
         try {
             const user_token = await AuthService.login(username, password);
             const user_data = await DataService.User.request_profile();
-            await thunkAPI.dispatch(setMessage({message: "Berhasil Login", status: 200}))
             return {user: user_data, token: user_token};
         } catch (e) {
             const pesan1 = (e.response.data.username ?? "") + (e.response.data.password ?? "")
@@ -74,7 +74,6 @@ export const login_by_google = createAsyncThunk(
             const user_token = await AuthService.login_by_google(t);
             console.log(user_token)
             const user_data = await DataService.User.request_profile();
-            await thunkAPI.dispatch(setMessage({message: "Berhasil Login", status: 200}))
             return {user: user_data, token: user_token}
 
         } catch (e) {

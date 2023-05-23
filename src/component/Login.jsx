@@ -2,11 +2,22 @@ import React from "react";
 import Logo from '../assets/logo.png';
 import {useDispatch, useSelector} from "react-redux";
 import {useForm} from "react-hook-form";
-import {login,login_by_google, logout} from '../storage/slices/auth.js';
+import {login, login_by_google, logout} from '../storage/slices/auth.js';
 import {Navigate, NavLink} from "react-router-dom";
 import Bg from '../assets/bg.jpg';
 import {useGoogleLogin} from '@react-oauth/google';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {toast} from "react-toastify";
+
+
+const promise_login = (promise)=>{
+    return toast.promise(promise, {
+                pending: "Memproses Login",
+                success: "Berhasil Memproses Login",
+                error: "Proses Login Gagal"
+            }
+        )
+}
 
 function Login(props) {
     const dispatch = useDispatch()
@@ -17,27 +28,12 @@ function Login(props) {
 
     const GoogleLoginSuccess = (user) => {
         const t = user.access_token
-        dispatch(login_by_google({t}))
-            .unwrap()
-            .then(() => {
-                console.log("Login Berhasil")
-            })
-            .catch(() => {
-                console.log("Error")
-            });
+        promise_login(dispatch(login_by_google({t})).unwrap())
     }
     const handleLogin = (formValue) => {
         const {username, password} = formValue;
-
-        dispatch(login({username, password}))
-            .unwrap()
-            .then(() => {
-                console.log("Login Berhasil")
-            })
-            .catch(() => {
-                console.log("Error")
-            });
-    };
+        promise_login(dispatch(login({username, password})).unwrap())
+    }
 
     if (props.logout) {
         dispatch(logout())
@@ -52,7 +48,8 @@ function Login(props) {
         <>
 
             <div className="min-h-[100vh] flex">
-                <div className="flex-1 flex flex-col justify-center py-24 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
+                <div
+                    className="flex-1 flex flex-col justify-center py-24 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
                     <div className="mx-auto w-full max-w-sm lg:w-96">
                         <div>
                             <img
@@ -110,7 +107,8 @@ function Login(props) {
                                     </div>
 
                                     <div className="space-y-1">
-                                        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                                        <label htmlFor="password"
+                                               className="block text-sm font-medium text-gray-700">
                                             Password
                                         </label>
                                         <div className="mt-1">
@@ -131,13 +129,15 @@ function Login(props) {
                                                 type="checkbox"
                                                 className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
                                             />
-                                            <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+                                            <label htmlFor="remember-me"
+                                                   className="ml-2 block text-sm text-gray-900">
                                                 Remember me
                                             </label>
                                         </div>
 
                                         <div className="text-sm">
-                                            <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
+                                            <a href="#"
+                                               className="font-medium text-indigo-600 hover:text-indigo-500">
                                                 Forgot your password?
                                             </a>
                                         </div>
